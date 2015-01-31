@@ -21,8 +21,6 @@ import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -117,20 +115,50 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseMoved
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+
         Shape shape = canvas.getSelectedShape();
-        int x = evt.getX() - deltaX;
-        int y = evt.getY() - deltaY;
-        shape.move(x, y);
-        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+
+        if (canMove) {
+            int x = evt.getX() - deltaX;
+            int y = evt.getY() - deltaY;
+            shape.move(x, y);
+            setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        }
+
+        if (canResize) {
+            int width = evt.getX() - shape.getX();
+            int height = evt.getY() - shape.getY();
+            shape.resize(width, height);
+        }
+        
         repaint();
     }//GEN-LAST:event_formMouseDragged
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        canResize = false;
+        canMove = false;
+
         if (canvas.getSelectedShape() != null) {
+
             Shape shape = canvas.getSelectedShape();
-            deltaX = evt.getX() - shape.getX();
-            deltaY = evt.getY() - shape.getY();
+
+            for (SquareResizeHandle resizeHandle : resizeHandles) {
+                if (resizeHandle.contains(evt.getX(), evt.getY())) {
+                    canResize = true; 
+                    canMove = false;
+                    break;
+                } else {
+                    canMove = true;
+                    canResize = false;
+                    deltaX = evt.getX() - shape.getX();
+                    deltaY = evt.getY() - shape.getY();
+                }
+            }
+            
+            System.out.println(canResize);
+            System.out.println(canMove);
         }
+                
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
