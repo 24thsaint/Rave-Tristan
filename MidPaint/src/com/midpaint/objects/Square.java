@@ -13,6 +13,8 @@
  */
 package com.midpaint.objects;
 
+import com.midpaint.objects.Shape;
+import java.awt.Color;
 import java.awt.Graphics;
 
 /**
@@ -27,12 +29,18 @@ public class Square extends Shape {
 
     @Override
     public void draw(Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        g.setColor(Color.BLUE);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.ORANGE);
+        g.drawRect(x, y, width, height);
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean contains(int mouseX, int mouseY) {
+        int x2 = this.x + width;
+        int y2 = this.y + height;
+
+        return mouseX >= x && mouseX <= x2 && mouseY >= y && mouseY <= y2;
     }
 
 }
