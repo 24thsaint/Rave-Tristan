@@ -33,7 +33,7 @@ public class Canvas {
         this.shapes.add(shape);
     }
 
-    public void removeShare(Shape shape) {
+    public void removeShape(Shape shape) {
         this.shapes.remove(shape);
     }
 

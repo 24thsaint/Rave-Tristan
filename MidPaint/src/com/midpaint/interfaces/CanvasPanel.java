@@ -21,9 +21,13 @@ import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -72,6 +76,11 @@ public class CanvasPanel extends javax.swing.JPanel {
                 formMouseReleased(evt);
             }
         });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -97,10 +106,10 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseMoved
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-        if (canvas.getSelectedShape()==null) {
+        if (canvas.getSelectedShape() == null) {
             return;
         }
-        
+
         Shape shape = canvas.getSelectedShape();
 
         if (canMove) {
@@ -115,7 +124,7 @@ public class CanvasPanel extends javax.swing.JPanel {
             int height = evt.getY() - shape.getY();
             shape.resize(width, height);
         }
-        
+
         repaint();
     }//GEN-LAST:event_formMouseDragged
 
@@ -129,15 +138,15 @@ public class CanvasPanel extends javax.swing.JPanel {
             } else {
                 System.out.println("No shape selected");
             }
-        }        
-        
+        }
+
         if (canvas.getSelectedShape() != null) {
 
             Shape shape = canvas.getSelectedShape();
 
             for (SquareResizeHandle resizeHandle : resizeHandles) {
                 if (resizeHandle.contains(evt.getX(), evt.getY())) {
-                    canResize = true; 
+                    canResize = true;
                     canMove = false;
                     break;
                 } else {
@@ -147,17 +156,25 @@ public class CanvasPanel extends javax.swing.JPanel {
                     deltaY = evt.getY() - shape.getY();
                 }
             }
-            
+
             System.out.println(canResize);
             System.out.println(canMove);
         }
-        
+        requestFocus();
         repaint();
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_formMouseReleased
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if (canvas.getSelectedShape() != null) {
+            canvas.removeShape(canvas.getSelectedShape());
+            canvas.setSelectedShape(null);
+            repaint();
+        }
+    }//GEN-LAST:event_formKeyPressed
 
     @Override
     public void paint(Graphics g) {
