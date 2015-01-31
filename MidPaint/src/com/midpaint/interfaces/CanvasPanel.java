@@ -113,24 +113,23 @@ public class CanvasPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_formMouseMoved
 
-    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        if (canvas.getSelectedShape() != null) {
-            Shape shape = canvas.getSelectedShape();
-            deltaX = evt.getX() - shape.getX();
-            deltaY = evt.getY() - shape.getY();
-            System.out.println(shape + " has been pressed");
-        }
-    }//GEN-LAST:event_formMousePressed
-
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         Shape shape = canvas.getSelectedShape();
-
         int x = evt.getX() - deltaX;
         int y = evt.getY() - deltaY;
 
         shape.move(x, y);
         repaint();
     }//GEN-LAST:event_formMouseDragged
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        if (canvas.getSelectedShape() != null) {
+            Shape shape = canvas.getSelectedShape();
+            deltaX = evt.getX() - shape.getX();
+            deltaY = evt.getY() - shape.getY();
+        }
+    }//GEN-LAST:event_formMousePressed
+
 
     @Override
     public void paint(Graphics g) {
