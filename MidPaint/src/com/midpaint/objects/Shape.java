@@ -88,7 +88,7 @@ public abstract class Shape {
     public abstract void draw(Graphics g);
 
     public abstract boolean contains(int x, int y);
-    
+
     public void resize(int newWidth, int newHeight) {
         width = newWidth;
         height = newHeight;
