@@ -21,16 +21,17 @@ import java.awt.Graphics;
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
 public class Square extends Shape {
-    
+
     public Square(int x, int y, int height, int width) {
         super(x, y, height, width);
+
     }
-    
+
     public Square(int x, int y) {
         super(x, y, 10, 10);
         setColor(Color.BLACK);
     }
-    
+
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.BLUE);
@@ -38,13 +39,13 @@ public class Square extends Shape {
         g.setColor(Color.ORANGE);
         g.drawRect(x, y, width, height);
     }
-    
+
     @Override
     public boolean contains(int mouseX, int mouseY) {
         int x2 = this.x + width;
         int y2 = this.y + height;
-        
+
         return mouseX >= x && mouseX <= x2 && mouseY >= y && mouseY <= y2;
     }
-    
+
 }
