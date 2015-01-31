@@ -13,39 +13,26 @@
  */
 package com.midpaint.objects;
 
-import com.midpaint.objects.Shape;
-import java.awt.Color;
-import java.awt.Graphics;
 
 /**
  *
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
-public class Square extends Shape {
-    
-    public Square(int x, int y, int height, int width) {
-        super(x, y, height, width);
+public class SquareResizeHandle extends Square {
+
+    private int cursorType;
+
+    public SquareResizeHandle(int x, int y, int cursorType) {
+        super(x, y);
+        this.cursorType = cursorType;
     }
-    
-    public Square(int x, int y) {
-        super(x, y, 10, 10);
-        setColor(Color.BLACK);
+
+    public int getCursorType() {
+        return cursorType;
     }
-    
-    @Override
-    public void draw(Graphics g) {
-        g.setColor(Color.BLUE);
-        g.fillRect(x, y, width, height);
-        g.setColor(Color.ORANGE);
-        g.drawRect(x, y, width, height);
+
+    public void setCursorType(int cursorType) {
+        this.cursorType = cursorType;
     }
-    
-    @Override
-    public boolean contains(int mouseX, int mouseY) {
-        int x2 = this.x + width;
-        int y2 = this.y + height;
-        
-        return mouseX >= x && mouseX <= x2 && mouseY >= y && mouseY <= y2;
-    }
-    
+
 }

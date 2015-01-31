@@ -93,4 +93,8 @@ public abstract class Shape {
 
     public abstract boolean contains(int x, int y);
     
+    public void resize(int newWidth, int newHeight) {
+        width = newWidth;
+        height = newHeight;
+    }
 }
