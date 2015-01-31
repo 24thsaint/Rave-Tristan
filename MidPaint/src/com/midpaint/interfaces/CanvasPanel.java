@@ -73,7 +73,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         for (Shape shape : canvas.getShapes()) {
             if (shape.contains(evt.getX(), evt.getY())) {
                 canvas.setSelectedShape(shape);                
-                System.out.println("Shape selected");
+                System.out.println(shape + " has been selected.");
             } else {
                 System.out.println("No shape selected");
             }
