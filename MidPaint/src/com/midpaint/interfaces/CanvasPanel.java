@@ -83,7 +83,7 @@ public class CanvasPanel extends javax.swing.JPanel {
 
         for (Shape shape : canvas.getShapes()) {
             if (shape.contains(evt.getX(), evt.getY())) {
-                canvas.setSelectedShape(shape);                
+                canvas.setSelectedShape(shape);
                 System.out.println(shape + " has been selected.");
             } else {
                 System.out.println("No shape selected");
@@ -108,7 +108,6 @@ public class CanvasPanel extends javax.swing.JPanel {
             deltaX = evt.getX() - shape.getX();
             deltaY = evt.getY() - shape.getY();
         }
-
     }//GEN-LAST:event_formMousePressed
 
     @Override
