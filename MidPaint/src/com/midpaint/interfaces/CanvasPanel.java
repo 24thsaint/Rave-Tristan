@@ -17,9 +17,12 @@ import com.midpaint.objects.Canvas;
 import com.midpaint.objects.Ellipse;
 import com.midpaint.objects.Shape;
 import com.midpaint.objects.Square;
+import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -32,6 +35,11 @@ public class CanvasPanel extends javax.swing.JPanel {
 
     private Canvas canvas = new Canvas();
     private Random random = new Random();
+    private List<SquareResizeHandle> resizeHandles = new ArrayList<>();
+    private boolean canResize = false;
+    private boolean canMove = false;
+    private int deltaX;
+    private int deltaY;
 
     /**
      * Creates new form CanvasPanel
@@ -50,9 +58,20 @@ public class CanvasPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
+            }
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+        });
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
             }
         });
 
@@ -73,24 +92,67 @@ public class CanvasPanel extends javax.swing.JPanel {
 
         for (Shape shape : canvas.getShapes()) {
             if (shape.contains(evt.getX(), evt.getY())) {
-                canvas.setSelectedShape(shape);                
+                canvas.setSelectedShape(shape);
                 System.out.println(shape + " has been selected.");
             } else {
                 System.out.println("No shape selected");
             }
         }
-        
+
         repaint();
     }//GEN-LAST:event_formMouseClicked
 
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        for (SquareResizeHandle handle : resizeHandles) {
+            if (handle.contains(evt.getX(), evt.getY())) {
+                setCursor(Cursor.getPredefinedCursor(handle.getCursorType()));
+                break;
+            } else {
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+        }
+    }//GEN-LAST:event_formMouseMoved
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        canResize = false;
+        canMove = false;
+        
+        Shape shape = canvas.getSelectedShape();
+        
+        if (shape==null) {
+            return;
+        }
+        
+        for (SquareResizeHandle resizeHandle : resizeHandles) {
+            if (resizeHandle.contains(evt.getX(), evt.getY())) {
+                canResize = true;
+                break;
+            } else {
+                canMove = true;
+                
+                deltaX = evt.getX() - shape.getX();
+                deltaY = evt.getY() - shape.getY();               
+            }
+        }
+    }//GEN-LAST:event_formMousePressed
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        Shape shape = canvas.getSelectedShape();
+        
+        if (canResize) {
+            
+        }
+    }//GEN-LAST:event_formMouseDragged
+
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g) {        
         super.paint(g);
         for (Shape shape : canvas.getShapes()) {
             shape.draw(g);
         }
 
         if (canvas.getSelectedShape() != null) {
+            resizeHandles.clear();
             final int SQUARE_SIZE = 8;
             final int HALF_SQUARE_SIZE = SQUARE_SIZE / 2;
 
@@ -99,21 +161,29 @@ public class CanvasPanel extends javax.swing.JPanel {
             int width = canvas.getSelectedShape().getWidth();
             int height = canvas.getSelectedShape().getHeight();
 
-            List<Point> points = new ArrayList<>();
-            points.add(new Point(x - HALF_SQUARE_SIZE, y - HALF_SQUARE_SIZE)); // NW
-            points.add(new Point(x + (width / 2) - HALF_SQUARE_SIZE, y - HALF_SQUARE_SIZE)); // N
-            points.add(new Point(x + width - HALF_SQUARE_SIZE, y - HALF_SQUARE_SIZE)); // NE
+            resizeHandles.add(
+                    new SquareResizeHandle(x - HALF_SQUARE_SIZE, y - HALF_SQUARE_SIZE, Cursor.NW_RESIZE_CURSOR)); // NW
+            resizeHandles.add(
+                    new SquareResizeHandle(x + (width / 2) - HALF_SQUARE_SIZE, y - HALF_SQUARE_SIZE, Cursor.N_RESIZE_CURSOR)); // N
+            resizeHandles.add(
+                    new SquareResizeHandle(x + width - HALF_SQUARE_SIZE, y - HALF_SQUARE_SIZE, Cursor.NE_RESIZE_CURSOR)); // NE
 
-            points.add(new Point(x - HALF_SQUARE_SIZE, y + (height / 2) - HALF_SQUARE_SIZE)); // E
-            points.add(new Point(x + width - HALF_SQUARE_SIZE, y + (height / 2) - HALF_SQUARE_SIZE)); // W
+            resizeHandles.add(
+                    new SquareResizeHandle(x - HALF_SQUARE_SIZE, y + (height / 2) - HALF_SQUARE_SIZE, Cursor.E_RESIZE_CURSOR)); // E
+            resizeHandles.add(
+                    new SquareResizeHandle(x + width - HALF_SQUARE_SIZE, y + (height / 2) - HALF_SQUARE_SIZE, Cursor.W_RESIZE_CURSOR)); // W
 
-            points.add(new Point(x - HALF_SQUARE_SIZE, y + height - HALF_SQUARE_SIZE)); // SW
-            points.add(new Point(x + (width / 2) - HALF_SQUARE_SIZE, y + (height) - HALF_SQUARE_SIZE)); // S
-            points.add(new Point(x + width - HALF_SQUARE_SIZE, y + height - HALF_SQUARE_SIZE)); // SE                
+            resizeHandles.add(
+                    new SquareResizeHandle(x - HALF_SQUARE_SIZE, y + height - HALF_SQUARE_SIZE, Cursor.SW_RESIZE_CURSOR)); // SW
+            resizeHandles.add(
+                    new SquareResizeHandle(x + (width / 2) - HALF_SQUARE_SIZE, y + (height) - HALF_SQUARE_SIZE, Cursor.S_RESIZE_CURSOR)); // S
+            resizeHandles.add(
+                    new SquareResizeHandle(x + width - HALF_SQUARE_SIZE, y + height - HALF_SQUARE_SIZE, Cursor.SE_RESIZE_CURSOR)); // SE
 
             g.setColor(Color.BLACK);
-            for (Point point : points) {
-                g.fillRect(point.x, point.y, SQUARE_SIZE, SQUARE_SIZE);
+
+            for (Square handle : resizeHandles) {
+                g.fillRect(handle.getX(), handle.getY(), SQUARE_SIZE, SQUARE_SIZE);
             }
         }
     }
@@ -126,16 +196,17 @@ public class CanvasPanel extends javax.swing.JPanel {
         );
 
         canvas.addShape(ellipse);
-
+        System.out.println(ellipse + " added to canvas");
         repaint();
     }
-    
+
     public void addSquare() {
         Square square = new Square(random.nextInt(getWidth() - Shape.PRIMARY_SIZE),
                 random.nextInt(getHeight() - Shape.PRIMARY_SIZE),
                 Shape.PRIMARY_SIZE,
                 Shape.PRIMARY_SIZE);
         canvas.addShape(square);
+        System.out.println(square + " added to canvas");
         repaint();
     }
 
