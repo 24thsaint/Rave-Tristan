@@ -102,10 +102,20 @@ public class CanvasPanel extends javax.swing.JPanel {
         }
         
         Shape shape = canvas.getSelectedShape();
-        int x = evt.getX() - deltaX;
-        int y = evt.getY() - deltaY;
-        shape.move(x, y);
-        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+
+        if (canMove) {
+            int x = evt.getX() - deltaX;
+            int y = evt.getY() - deltaY;
+            shape.move(x, y);
+            setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        }
+
+        if (canResize) {
+            int width = evt.getX() - shape.getX();
+            int height = evt.getY() - shape.getY();
+            shape.resize(width, height);
+        }
+        
         repaint();
     }//GEN-LAST:event_formMouseDragged
 
@@ -122,9 +132,24 @@ public class CanvasPanel extends javax.swing.JPanel {
         }        
         
         if (canvas.getSelectedShape() != null) {
+
             Shape shape = canvas.getSelectedShape();
-            deltaX = evt.getX() - shape.getX();
-            deltaY = evt.getY() - shape.getY();
+
+            for (SquareResizeHandle resizeHandle : resizeHandles) {
+                if (resizeHandle.contains(evt.getX(), evt.getY())) {
+                    canResize = true; 
+                    canMove = false;
+                    break;
+                } else {
+                    canMove = true;
+                    canResize = false;
+                    deltaX = evt.getX() - shape.getX();
+                    deltaY = evt.getY() - shape.getY();
+                }
+            }
+            
+            System.out.println(canResize);
+            System.out.println(canMove);
         }
         
         repaint();
