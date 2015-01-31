@@ -16,6 +16,7 @@ package com.midpaint.interfaces;
 import com.midpaint.objects.Canvas;
 import com.midpaint.objects.Ellipse;
 import com.midpaint.objects.Shape;
+import com.midpaint.objects.Square;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -126,6 +127,15 @@ public class CanvasPanel extends javax.swing.JPanel {
 
         canvas.addShape(ellipse);
 
+        repaint();
+    }
+    
+    public void addSquare() {
+        Square square = new Square(random.nextInt(getWidth() - Shape.PRIMARY_SIZE),
+                random.nextInt(getHeight() - Shape.PRIMARY_SIZE),
+                Shape.PRIMARY_SIZE,
+                Shape.PRIMARY_SIZE);
+        canvas.addShape(square);
         repaint();
     }
 
