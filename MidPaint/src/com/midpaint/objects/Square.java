@@ -13,7 +13,6 @@
  */
 package com.midpaint.objects;
 
-import com.midpaint.objects.Shape;
 import java.awt.Color;
 import java.awt.Graphics;
 

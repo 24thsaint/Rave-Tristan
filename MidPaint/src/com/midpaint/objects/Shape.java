@@ -15,10 +15,6 @@ package com.midpaint.objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.geom.Ellipse2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -92,5 +88,5 @@ public abstract class Shape {
     public abstract void draw(Graphics g);
 
     public abstract boolean contains(int x, int y);
-    
+
 }

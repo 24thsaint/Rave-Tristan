@@ -32,6 +32,8 @@ public class CanvasPanel extends javax.swing.JPanel {
 
     private Canvas canvas = new Canvas();
     private Random random = new Random();
+    private int deltaX;
+    private int deltaY;
 
     /**
      * Creates new form CanvasPanel
@@ -50,9 +52,17 @@ public class CanvasPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
+            }
+        });
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
             }
         });
 
@@ -73,21 +83,39 @@ public class CanvasPanel extends javax.swing.JPanel {
 
         for (Shape shape : canvas.getShapes()) {
             if (shape.contains(evt.getX(), evt.getY())) {
-                canvas.setSelectedShape(shape);                
+                canvas.setSelectedShape(shape);
                 System.out.println("Shape selected");
             } else {
                 System.out.println("No shape selected");
             }
         }
-        
+
         repaint();
     }//GEN-LAST:event_formMouseClicked
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        Shape shape = canvas.getSelectedShape();
+        int x = evt.getX() - deltaX;
+        int y = evt.getY() - deltaY;
+
+        shape.move(x, y);
+        repaint();
+    }//GEN-LAST:event_formMouseDragged
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        if (canvas.getSelectedShape() != null) {
+            Shape shape = canvas.getSelectedShape();
+            deltaX = evt.getX() - shape.getX();
+            deltaY = evt.getY() - shape.getY();
+        }
+
+    }//GEN-LAST:event_formMousePressed
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        for (Shape shape : canvas.getShapes()) {
-            shape.draw(g);
+        for (Shape shape1 : canvas.getShapes()) {
+            shape1.draw(g);
         }
 
         if (canvas.getSelectedShape() != null) {
@@ -129,7 +157,7 @@ public class CanvasPanel extends javax.swing.JPanel {
 
         repaint();
     }
-    
+
     public void addSquare() {
         Square square = new Square(random.nextInt(getWidth() - Shape.PRIMARY_SIZE),
                 random.nextInt(getHeight() - Shape.PRIMARY_SIZE),
