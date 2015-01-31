@@ -114,41 +114,29 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseMoved
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        canResize = false;
-        canMove = false;
-        
-        Shape shape = canvas.getSelectedShape();
-        
-        if (shape==null) {
-            return;
-        }
-        
-        for (SquareResizeHandle resizeHandle : resizeHandles) {
-            if (resizeHandle.contains(evt.getX(), evt.getY())) {
-                canResize = true;
-                break;
-            } else {
-                canMove = true;
-                
-                deltaX = evt.getX() - shape.getX();
-                deltaY = evt.getY() - shape.getY();               
-            }
+        if (canvas.getSelectedShape() != null) {
+            Shape shape = canvas.getSelectedShape();
+            deltaX = evt.getX() - shape.getX();
+            deltaY = evt.getY() - shape.getY();
+            System.out.println(shape + " has been pressed");
         }
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         Shape shape = canvas.getSelectedShape();
-        
-        if (canResize) {
-            
-        }
+
+        int x = evt.getX() - deltaX;
+        int y = evt.getY() - deltaY;
+
+        shape.move(x, y);
+        repaint();
     }//GEN-LAST:event_formMouseDragged
 
     @Override
-    public void paint(Graphics g) {        
+    public void paint(Graphics g) {
         super.paint(g);
-        for (Shape shape : canvas.getShapes()) {
-            shape.draw(g);
+        for (Shape shape1 : canvas.getShapes()) {
+            shape1.draw(g);
         }
 
         if (canvas.getSelectedShape() != null) {

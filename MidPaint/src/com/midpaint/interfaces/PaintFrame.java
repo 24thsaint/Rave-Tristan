@@ -13,8 +13,6 @@
  */
 package com.midpaint.interfaces;
 
-import com.midpaint.objects.Ellipse;
-
 /**
  *
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
@@ -101,8 +99,6 @@ public class PaintFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      
-        
         canvasPanel1.addEllipse();
     }//GEN-LAST:event_jButton1ActionPerformed
 
