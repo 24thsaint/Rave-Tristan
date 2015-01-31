@@ -21,8 +21,6 @@ import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -67,9 +65,6 @@ public class CanvasPanel extends javax.swing.JPanel {
             }
         });
         addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                formMouseClicked(evt);
-            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
@@ -90,21 +85,6 @@ public class CanvasPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        canvas.setSelectedShape(null);
-
-        for (Shape shape : canvas.getShapes()) {
-            if (shape.contains(evt.getX(), evt.getY())) {
-                canvas.setSelectedShape(shape);
-                System.out.println(shape + " has been selected.");
-            } else {
-                System.out.println("No shape selected");
-            }
-        }
-
-        repaint();
-    }//GEN-LAST:event_formMouseClicked
-
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
         for (SquareResizeHandle handle : resizeHandles) {
             if (handle.contains(evt.getX(), evt.getY())) {
@@ -117,6 +97,10 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseMoved
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        if (canvas.getSelectedShape()==null) {
+            return;
+        }
+        
         Shape shape = canvas.getSelectedShape();
         int x = evt.getX() - deltaX;
         int y = evt.getY() - deltaY;
@@ -126,11 +110,24 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        canvas.setSelectedShape(null);
+
+        for (Shape shape : canvas.getShapes()) {
+            if (shape.contains(evt.getX(), evt.getY())) {
+                canvas.setSelectedShape(shape);
+                System.out.println(shape + " has been selected.");
+            } else {
+                System.out.println("No shape selected");
+            }
+        }        
+        
         if (canvas.getSelectedShape() != null) {
             Shape shape = canvas.getSelectedShape();
             deltaX = evt.getX() - shape.getX();
             deltaY = evt.getY() - shape.getY();
         }
+        
+        repaint();
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
