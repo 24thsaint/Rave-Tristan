@@ -22,9 +22,13 @@ import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -76,6 +80,11 @@ public class CanvasPanel extends javax.swing.JPanel {
                 formMouseReleased(evt);
             }
         });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -124,6 +133,17 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        canvas.setSelectedShape(null);
+
+        for (Shape shape : canvas.getShapes()) {
+            if (shape.contains(evt.getX(), evt.getY())) {
+                canvas.setSelectedShape(shape);
+                System.out.println(shape + " has been selected.");
+            } else {
+                System.out.println("No shape selected");
+            }
+        }
+
         if (canvas.getSelectedShape() != null) {
 
             Shape shape = canvas.getSelectedShape();
@@ -144,7 +164,7 @@ public class CanvasPanel extends javax.swing.JPanel {
             System.out.println(canResize);
             System.out.println(canMove);
         }
-
+        requestFocus();
         repaint();
     }//GEN-LAST:event_formMousePressed
 
@@ -164,6 +184,14 @@ public class CanvasPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_formMouseClicked
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if (canvas.getSelectedShape() != null) {
+            canvas.removeShape(canvas.getSelectedShape());
+            canvas.setSelectedShape(null);
+            repaint();
+        }
+    }//GEN-LAST:event_formKeyPressed
 
     @Override
     public void paint(Graphics g) {
