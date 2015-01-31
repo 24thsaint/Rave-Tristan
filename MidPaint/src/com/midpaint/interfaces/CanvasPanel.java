@@ -73,6 +73,9 @@ public class CanvasPanel extends javax.swing.JPanel {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                formMouseReleased(evt);
+            }
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -117,8 +120,8 @@ public class CanvasPanel extends javax.swing.JPanel {
         Shape shape = canvas.getSelectedShape();
         int x = evt.getX() - deltaX;
         int y = evt.getY() - deltaY;
-
         shape.move(x, y);
+        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
         repaint();
     }//GEN-LAST:event_formMouseDragged
 
@@ -130,6 +133,9 @@ public class CanvasPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_formMousePressed
 
+    private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_formMouseReleased
 
     @Override
     public void paint(Graphics g) {
