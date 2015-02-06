@@ -153,13 +153,6 @@ public class PaintFrame extends javax.swing.JFrame {
             }
         });
 
-        colorButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        colorButton.setLabel("Channge Color");
-        colorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                colorButtonActionPerformed(evt);
-            }
-        });
 
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -223,9 +216,10 @@ public class PaintFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_redoButtonActionPerformed
 
     private void colorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorButtonActionPerformed
-        Color color = JColorChooser.showDialog(rootPane, "Select Color", Color.black);
+        
 
         if (canvasPanel1.getCanvas().getSelectedShape() != null) {
+            Color color = JColorChooser.showDialog(rootPane, "Select Color", Color.black);
             canvasPanel1.getCanvas().getSelectedShape().setColor(color);
         }
         canvasPanel1.repaint();
