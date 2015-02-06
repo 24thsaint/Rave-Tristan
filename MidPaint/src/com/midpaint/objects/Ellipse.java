@@ -13,6 +13,7 @@
  */
 package com.midpaint.objects;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 /**
@@ -23,12 +24,13 @@ public class Ellipse extends Shape {
 
     public Ellipse(int x, int y, int height, int width) {
         super(x, y, height, width);
+        setColor(Color.GREEN);
     }
 
     @Override
     public void draw(Graphics g) {
-        //g.setColor(Color.BLACK);
-        //g.drawOval(x, y, width, height);
+        g.setColor(Color.red);
+        g.drawOval(x, y, width, height);
         g.setColor(color);
         g.fillOval(x, y, width, height);
     }

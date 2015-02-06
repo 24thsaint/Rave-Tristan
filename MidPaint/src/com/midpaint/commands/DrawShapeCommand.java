@@ -20,7 +20,7 @@ import com.midpaint.objects.Shape;
  *
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
-public class DrawShapeCommand implements Command, Cloneable {
+public class DrawShapeCommand implements Command {
 
     private Shape shape;
     private Canvas canvas;
@@ -28,21 +28,15 @@ public class DrawShapeCommand implements Command, Cloneable {
     public DrawShapeCommand(Shape shape, Canvas canvas) {
         this.shape = shape;
         this.canvas = canvas;
-    }       
-    
+    }
+
     @Override
     public void execute() {
         this.canvas.addShape(shape);
     }
-    
+
     @Override
     public void unexecute() {
         this.canvas.removeShape(shape);
     }
-    
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-    
 }

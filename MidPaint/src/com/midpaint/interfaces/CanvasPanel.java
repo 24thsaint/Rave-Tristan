@@ -13,6 +13,7 @@
  */
 package com.midpaint.interfaces;
 
+import com.midpaint.commands.DeleteShapeCommand;
 import com.midpaint.commands.DrawShapeCommand;
 import com.midpaint.commands.Invoker;
 import com.midpaint.commands.MoveShapeCommand;
@@ -24,6 +25,8 @@ import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -41,8 +44,12 @@ public class CanvasPanel extends javax.swing.JPanel {
     private boolean canMove = false;
     private int deltaX;
     private int deltaY;
-    private Invoker invoker = new Invoker();
     private MoveShapeCommand moveShapeCommand;
+    private Invoker invoker = new Invoker();
+
+    public Canvas getCanvas() {
+        return canvas;
+    }
 
     /**
      * Creates new form CanvasPanel
@@ -133,6 +140,7 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+
         if (canvas.getSelectedShape() != null) {
 
             Shape shape = canvas.getSelectedShape();
@@ -180,15 +188,16 @@ public class CanvasPanel extends javax.swing.JPanel {
                 System.out.println("No shape selected");
             }
         }
-
         repaint();
     }//GEN-LAST:event_formMouseClicked
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if (canvas.getSelectedShape() != null) {
-            canvas.removeShape(canvas.getSelectedShape());
+        if (canvas.getSelectedShape() != null && evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            DeleteShapeCommand deleteCommand = new DeleteShapeCommand(canvas.getSelectedShape(), canvas);
+            deleteCommand.execute();
             canvas.setSelectedShape(null);
             repaint();
+//            canvas.removeShape(canvas.getSelectedShape());
         }
     }//GEN-LAST:event_formKeyPressed
 
@@ -256,10 +265,10 @@ public class CanvasPanel extends javax.swing.JPanel {
                 random.nextInt(getHeight() - Shape.PRIMARY_SIZE),
                 Shape.PRIMARY_SIZE,
                 Shape.PRIMARY_SIZE);
+        //canvas.addShape(square);
 
         DrawShapeCommand drawShapeCommand = new DrawShapeCommand(square, canvas);
         drawShapeCommand.execute();
-        invoker.addCommand(drawShapeCommand);
 
         System.out.println(square + " added to canvas");
         repaint();

@@ -24,7 +24,7 @@ public class Square extends Shape {
 
     public Square(int x, int y, int height, int width) {
         super(x, y, height, width);
-
+        setColor(Color.BLUE);
     }
 
     public Square(int x, int y) {
@@ -34,7 +34,7 @@ public class Square extends Shape {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.BLUE);
+        g.setColor(getColor());
         g.fillRect(x, y, width, height);
         g.setColor(Color.ORANGE);
         g.drawRect(x, y, width, height);
