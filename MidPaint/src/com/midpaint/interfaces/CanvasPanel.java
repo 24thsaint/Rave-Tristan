@@ -264,13 +264,13 @@ public class CanvasPanel extends javax.swing.JPanel {
         Square square = new Square(random.nextInt(getWidth() - Shape.PRIMARY_SIZE),
                 random.nextInt(getHeight() - Shape.PRIMARY_SIZE),
                 Shape.PRIMARY_SIZE,
-                Shape.PRIMARY_SIZE);
-        //canvas.addShape(square);
+                Shape.PRIMARY_SIZE);        
 
         DrawShapeCommand drawShapeCommand = new DrawShapeCommand(square, canvas);
         drawShapeCommand.execute();
         invoker.addCommand(drawShapeCommand);
 
+        
         System.out.println(square + " added to canvas");
         repaint();
     }

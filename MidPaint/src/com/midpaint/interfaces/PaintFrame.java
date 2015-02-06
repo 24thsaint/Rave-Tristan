@@ -94,14 +94,6 @@ public class PaintFrame extends javax.swing.JFrame {
             }
         });
 
-        drawSquareButton.setText("Draw Square");
-        drawSquareButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        drawSquareButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                drawSquareButtonActionPerformed(evt);
-            }
-        });
-
         removeButton.setText("Remove");
         removeButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         removeButton.addActionListener(new java.awt.event.ActionListener() {
