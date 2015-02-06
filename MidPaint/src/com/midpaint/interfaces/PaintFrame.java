@@ -112,6 +112,41 @@ public class PaintFrame extends javax.swing.JFrame {
 
         undoButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         undoButton.setLabel("Undo");
+
+        redoButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        redoButton.setLabel("Redo");
+        redoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                redoButtonActionPerformed(evt);
+            }
+        });
+
+        colorButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        colorButton.setLabel("Channge Color");
+        colorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorButtonActionPerformed(evt);
+            }
+        });
+
+        drawSquareButton.setText("Draw Square");
+        drawSquareButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        drawSquareButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drawSquareButtonActionPerformed(evt);
+            }
+        });
+
+        removeButton.setText("Remove");
+        removeButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
+
+        undoButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        undoButton.setLabel("Undo");
         undoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 undoButtonActionPerformed(evt);
