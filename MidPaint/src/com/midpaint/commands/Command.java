@@ -18,5 +18,6 @@ package com.midpaint.commands;
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
 public interface Command{
-    public void execute();    
+    public void execute();   
+    public void unexecute();
 }

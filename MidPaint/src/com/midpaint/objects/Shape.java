@@ -37,7 +37,6 @@ public abstract class Shape {
         this.y = y;
         this.height = height;
         this.width = width;
-        this.color = Color.GREEN;
     }
 
     public int getX() {
