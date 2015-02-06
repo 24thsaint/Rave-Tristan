@@ -269,6 +269,7 @@ public class CanvasPanel extends javax.swing.JPanel {
 
         DrawShapeCommand drawShapeCommand = new DrawShapeCommand(square, canvas);
         drawShapeCommand.execute();
+        invoker.addCommand(drawShapeCommand);
 
         System.out.println(square + " added to canvas");
         repaint();
