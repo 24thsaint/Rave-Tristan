@@ -14,6 +14,8 @@
 package com.midpaint.interfaces;
 
 import com.midpaint.commands.DrawShapeCommand;
+import com.midpaint.commands.Invoker;
+import com.midpaint.commands.MoveShapeCommand;
 import com.midpaint.objects.Canvas;
 import com.midpaint.objects.Ellipse;
 import com.midpaint.objects.Shape;
@@ -22,13 +24,9 @@ import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.KeyStroke;
 
 /**
  *
@@ -43,6 +41,8 @@ public class CanvasPanel extends javax.swing.JPanel {
     private boolean canMove = false;
     private int deltaX;
     private int deltaY;
+    private Invoker invoker = new Invoker();
+    private MoveShapeCommand moveShapeCommand;
 
     /**
      * Creates new form CanvasPanel
@@ -133,17 +133,6 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        canvas.setSelectedShape(null);
-
-        for (Shape shape : canvas.getShapes()) {
-            if (shape.contains(evt.getX(), evt.getY())) {
-                canvas.setSelectedShape(shape);
-                System.out.println(shape + " has been selected.");
-            } else {
-                System.out.println("No shape selected");
-            }
-        }
-
         if (canvas.getSelectedShape() != null) {
 
             Shape shape = canvas.getSelectedShape();
@@ -158,6 +147,7 @@ public class CanvasPanel extends javax.swing.JPanel {
                     canResize = false;
                     deltaX = evt.getX() - shape.getX();
                     deltaY = evt.getY() - shape.getY();
+                    moveShapeCommand = new MoveShapeCommand(shape, canvas, shape.getX(), shape.getY());
                 }
             }
 
@@ -170,6 +160,13 @@ public class CanvasPanel extends javax.swing.JPanel {
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        if (moveShapeCommand != null) {
+            moveShapeCommand.setNewLocation(
+                    canvas.getSelectedShape().getX(),
+                    canvas.getSelectedShape().getY());
+            invoker.addCommand(moveShapeCommand);
+            moveShapeCommand = null;
+        }
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
@@ -183,6 +180,8 @@ public class CanvasPanel extends javax.swing.JPanel {
                 System.out.println("No shape selected");
             }
         }
+
+        repaint();
     }//GEN-LAST:event_formMouseClicked
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
@@ -243,13 +242,12 @@ public class CanvasPanel extends javax.swing.JPanel {
                 Shape.PRIMARY_SIZE,
                 Shape.PRIMARY_SIZE
         );
-//
-//        canvas.addShape(ellipse);
-        System.out.println(ellipse + " added to canvas");
 
         DrawShapeCommand drawShapeCommand = new DrawShapeCommand(ellipse, canvas);
         drawShapeCommand.execute();
+        invoker.addCommand(drawShapeCommand);
 
+        System.out.println(ellipse + " added to canvas");
         repaint();
     }
 
@@ -258,12 +256,22 @@ public class CanvasPanel extends javax.swing.JPanel {
                 random.nextInt(getHeight() - Shape.PRIMARY_SIZE),
                 Shape.PRIMARY_SIZE,
                 Shape.PRIMARY_SIZE);
-        //canvas.addShape(square);
-        
+
         DrawShapeCommand drawShapeCommand = new DrawShapeCommand(square, canvas);
-        drawShapeCommand.execute();                
-        
+        drawShapeCommand.execute();
+        invoker.addCommand(drawShapeCommand);
+
         System.out.println(square + " added to canvas");
+        repaint();
+    }
+
+    public void undo() {
+        invoker.undo().unexecute();
+        repaint();
+    }
+
+    public void redo() {
+        invoker.redo().execute();
         repaint();
     }
 

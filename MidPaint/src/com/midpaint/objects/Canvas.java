@@ -13,6 +13,7 @@
  */
 package com.midpaint.objects;
 
+import com.midpaint.commands.Invoker;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import java.util.List;
  */
 public class Canvas {
 
-    private List<Shape> shapes = new ArrayList<>();
+    private List<Shape> shapes = new ArrayList<>();    
     private Shape selectedShape;
 
     public List<Shape> getShapes() {
@@ -30,7 +31,7 @@ public class Canvas {
     }
 
     public void addShape(Shape shape) {
-        this.shapes.add(shape);
+        this.shapes.add(shape);        
     }
 
     public void removeShape(Shape shape) {

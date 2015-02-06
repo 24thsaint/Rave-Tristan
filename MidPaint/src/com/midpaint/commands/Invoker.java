@@ -13,13 +13,32 @@
  */
 package com.midpaint.commands;
 
+import java.awt.Point;
+import java.util.Stack;
+
 /**
  *
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
-public interface Command {
-
-    public void execute();
-
-    public void unexecute();
+public class Invoker {
+    private Stack<Command> undoStack = new Stack<>();
+    private Stack<Command> redoStack = new Stack<>();
+    
+    public Command undo() {
+        Command command = undoStack.pop();
+        redoStack.push(command);
+        return command;
+    }
+    
+    public Command redo() {
+        Command command = redoStack.pop();
+        undoStack.push(command);
+        return command;
+    }
+    
+    public void addCommand(Command command) {
+        undoStack.add(command);
+        redoStack.clear();
+    }
+    
 }

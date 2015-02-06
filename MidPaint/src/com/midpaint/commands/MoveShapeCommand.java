@@ -13,13 +13,42 @@
  */
 package com.midpaint.commands;
 
+import com.midpaint.objects.Canvas;
+import com.midpaint.objects.Shape;
+
 /**
  *
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
-public interface Command {
+public class MoveShapeCommand implements Command {
 
-    public void execute();
+    private Shape shape;
+    private Canvas canvas;
+    private int newX;
+    private int newY;
+    private int oldX;
+    private int oldY;
 
-    public void unexecute();
+    public MoveShapeCommand(Shape shape, Canvas canvas, int oldX, int oldY) {
+        this.shape = shape;
+        this.canvas = canvas;
+        this.oldX = oldX;
+        this.oldY = oldY;
+    }
+
+    @Override
+    public void execute() {
+        shape.move(newX, newY);
+    }
+
+    @Override
+    public void unexecute() {
+        shape.move(oldX, oldY);
+    }
+
+    public void setNewLocation(int x, int y) {
+        newX = x;
+        newY = y;
+    }
+
 }

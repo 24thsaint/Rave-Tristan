@@ -36,6 +36,11 @@ public class DrawShapeCommand implements Command, Cloneable {
     }
     
     @Override
+    public void unexecute() {
+        this.canvas.removeShape(shape);
+    }
+    
+    @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
