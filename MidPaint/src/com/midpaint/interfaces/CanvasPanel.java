@@ -44,7 +44,7 @@ public class CanvasPanel extends javax.swing.JPanel {
     private int deltaX;
     private int deltaY;
     private MoveShapeCommand moveShapeCommand;
-    private Invoker invoker = new Invoker();    
+    private Invoker invoker = new Invoker();
 
     public Canvas getCanvas() {
         return canvas;
@@ -136,17 +136,49 @@ public class CanvasPanel extends javax.swing.JPanel {
         if (canResize) {
             int width = evt.getX() - shape.getX();
             int height = evt.getY() - shape.getY();
-            shape.resize(width, height);
+//            shape.resize(width, height);
 
             for (SquareResizeHandle resizeHandle : resizeHandles) {
                 if (resizeHandle.contains(evt.getX(), evt.getY())) {
                     switch (resizeHandle.getCursorType()) {
                         case Cursor.N_RESIZE_CURSOR:
                             int heightC = shape.getHeight() - height;
-                            shape.alterShape(shape.getX(), shape.getY() + height, shape.getWidth(), heightC);
-                            System.out.println("North resize execute");
+                            shape.alterShape(shape.getX(), shape.getY() + height, shape.getWidth(), heightC);                            
+                            break;
+                        case Cursor.NW_RESIZE_CURSOR:
+                            int widthC = shape.getWidth() - width;
+                            heightC = shape.getHeight() - height;
+                            shape.alterShape(shape.getX() + width, shape.getY() + height, widthC, heightC);
+                            break;
+                        case Cursor.W_RESIZE_CURSOR:
+                            widthC = shape.getWidth() - width;
+                            shape.alterShape(shape.getX() + widthC, shape.getY(), widthC, shape.getHeight());
+                            break;
+                        case Cursor.SW_RESIZE_CURSOR:
+                            widthC = shape.getWidth() - width;
+                            heightC = height;
+                            shape.alterShape(shape.getX() + width, shape.getY(), widthC, heightC);
+                            break;
+                        case Cursor.S_RESIZE_CURSOR:
+                            heightC = height;
+                            shape.alterShape(shape.getX(), shape.getY(), shape.getWidth(), heightC);
+                            break;
+                        case Cursor.SE_RESIZE_CURSOR:
+                            widthC = width;
+                            heightC = height;
+                            shape.alterShape(shape.getX(), shape.getY(), widthC, heightC);
+                            break;
+                        case Cursor.E_RESIZE_CURSOR:
+                            widthC = width;
+                            shape.alterShape(shape.getX(), shape.getY(), widthC, shape.getHeight());
+                            break;
+                        case Cursor.NE_RESIZE_CURSOR:
+                            widthC = width;
+                            heightC = shape.getHeight() - height;
+                            shape.alterShape(shape.getX(), shape.getY() + height, widthC, heightC);
                             break;
                     }
+                    break;
                 }
             }
         }
