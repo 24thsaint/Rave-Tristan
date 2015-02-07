@@ -25,7 +25,6 @@ import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +48,10 @@ public class CanvasPanel extends javax.swing.JPanel {
 
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    public Invoker getInvoker() {
+        return invoker;
     }
 
     /**
@@ -209,6 +212,7 @@ public class CanvasPanel extends javax.swing.JPanel {
             deleteCommand.execute();
             canvas.setSelectedShape(null);
             repaint();
+            invoker.addCommand(deleteCommand);
 //            canvas.removeShape(canvas.getSelectedShape());
         }
     }//GEN-LAST:event_formKeyPressed
