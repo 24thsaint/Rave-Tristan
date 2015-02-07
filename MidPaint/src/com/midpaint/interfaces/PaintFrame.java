@@ -137,22 +137,6 @@ public class PaintFrame extends javax.swing.JFrame {
             }
         });
 
-        undoButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        undoButton.setLabel("Undo");
-        undoButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                undoButtonActionPerformed(evt);
-            }
-        });
-
-        redoButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        redoButton.setLabel("Redo");
-        redoButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                redoButtonActionPerformed(evt);
-            }
-        });
-
 
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
