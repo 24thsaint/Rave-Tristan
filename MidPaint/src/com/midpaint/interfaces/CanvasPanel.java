@@ -45,7 +45,7 @@ public class CanvasPanel extends javax.swing.JPanel {
     private int deltaX;
     private int deltaY;
     private MoveShapeCommand moveShapeCommand;
-    private Invoker invoker = new Invoker();
+    private Invoker invoker = new Invoker();    
 
     public Canvas getCanvas() {
         return canvas;
@@ -134,6 +134,18 @@ public class CanvasPanel extends javax.swing.JPanel {
             int width = evt.getX() - shape.getX();
             int height = evt.getY() - shape.getY();
             shape.resize(width, height);
+
+            for (SquareResizeHandle resizeHandle : resizeHandles) {
+                if (resizeHandle.contains(evt.getX(), evt.getY())) {
+                    switch (resizeHandle.getCursorType()) {
+                        case Cursor.N_RESIZE_CURSOR:
+                            int heightC = shape.getHeight() - height;
+                            shape.alterShape(shape.getX(), shape.getY() + height, shape.getWidth(), heightC);
+                            System.out.println("North resize execute");
+                            break;
+                    }
+                }
+            }
         }
 
         repaint();
@@ -264,12 +276,12 @@ public class CanvasPanel extends javax.swing.JPanel {
         Square square = new Square(random.nextInt(getWidth() - Shape.PRIMARY_SIZE),
                 random.nextInt(getHeight() - Shape.PRIMARY_SIZE),
                 Shape.PRIMARY_SIZE,
-                Shape.PRIMARY_SIZE);        
+                Shape.PRIMARY_SIZE);
 
         DrawShapeCommand drawShapeCommand = new DrawShapeCommand(square, canvas);
         drawShapeCommand.execute();
         invoker.addCommand(drawShapeCommand);
-        
+
         System.out.println(square + " added to canvas");
         repaint();
     }
