@@ -33,10 +33,7 @@ public abstract class Shape {
     protected Random random = new Random();
 
     public Shape(int x, int y, int height, int width) {
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        this.width = width;
+        alterShape(x, y, width, height);
     }
 
     public int getX() {
@@ -93,4 +90,10 @@ public abstract class Shape {
         height = newHeight;
     }
 
+    public void alterShape(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.height = height;
+        this.width = width;
+    }
 }
