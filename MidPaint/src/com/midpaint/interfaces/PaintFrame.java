@@ -44,11 +44,11 @@ public class PaintFrame extends javax.swing.JFrame {
         drawEllipsButton = new javax.swing.JButton();
         drawSquareButton = new javax.swing.JButton();
         removeButton = new javax.swing.JButton();
-        undoButton = new java.awt.Button();
-        redoButton = new java.awt.Button();
         colorButton = new java.awt.Button();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        undo = new javax.swing.JButton();
+        redo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MidPaint");
@@ -94,33 +94,6 @@ public class PaintFrame extends javax.swing.JFrame {
             }
         });
 
-        removeButton.setText("Remove");
-        removeButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        removeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeButtonActionPerformed(evt);
-            }
-        });
-
-        undoButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        undoButton.setLabel("Undo");
-
-        redoButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        redoButton.setLabel("Redo");
-        redoButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                redoButtonActionPerformed(evt);
-            }
-        });
-
-        colorButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        colorButton.setLabel("Channge Color");
-        colorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                colorButtonActionPerformed(evt);
-            }
-        });
-
         drawSquareButton.setText("Draw Square");
         drawSquareButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         drawSquareButton.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +110,27 @@ public class PaintFrame extends javax.swing.JFrame {
             }
         });
 
+        colorButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        colorButton.setLabel("Channge Color");
+        colorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorButtonActionPerformed(evt);
+            }
+        });
 
+        undo.setText("Undo");
+        undo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoActionPerformed(evt);
+            }
+        });
+
+        redo.setText("Redo");
+        redo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                redoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,12 +146,12 @@ public class PaintFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(undoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(undo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(redoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(redo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(colorButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 138, Short.MAX_VALUE))
+                        .addGap(0, 143, Short.MAX_VALUE))
                     .addComponent(jDesktopPane1))
                 .addContainerGap())
         );
@@ -171,9 +164,9 @@ public class PaintFrame extends javax.swing.JFrame {
                         .addComponent(drawEllipsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(drawSquareButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(removeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(undoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(redoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(colorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(colorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(undo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(redo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jDesktopPane1)
                 .addContainerGap())
@@ -195,10 +188,6 @@ public class PaintFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_removeButtonActionPerformed
 
-    private void redoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoButtonActionPerformed
-        canvasPanel1.redo();
-    }//GEN-LAST:event_redoButtonActionPerformed
-
     private void colorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorButtonActionPerformed
         
 
@@ -210,9 +199,13 @@ public class PaintFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_colorButtonActionPerformed
 
-    private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
+    private void undoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoActionPerformed
         canvasPanel1.undo();
-    }//GEN-LAST:event_undoButtonActionPerformed
+    }//GEN-LAST:event_undoActionPerformed
+
+    private void redoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoActionPerformed
+        canvasPanel1.redo();
+    }//GEN-LAST:event_redoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -257,8 +250,8 @@ public class PaintFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JDesktopPane jDesktopPane1;
-    private java.awt.Button redoButton;
+    private javax.swing.JButton redo;
     private javax.swing.JButton removeButton;
-    private java.awt.Button undoButton;
+    private javax.swing.JButton undo;
     // End of variables declaration//GEN-END:variables
 }
