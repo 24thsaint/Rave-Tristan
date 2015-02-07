@@ -13,14 +13,14 @@ import java.awt.Color;
  *
  * @author hero
  */
-public class ColorChangeCommand implements Command {
+public class ChangeColorCommand implements Command {
 
     private Shape shape;
     private Canvas canvas;
     private Color newColor;
     private Color oldColor;
 
-    public ColorChangeCommand(Shape shape, Canvas canvas, Color oldColor) {
+    public ChangeColorCommand(Shape shape, Canvas canvas, Color oldColor) {
         this.shape = shape;
         this.canvas = canvas;
         this.oldColor = oldColor;

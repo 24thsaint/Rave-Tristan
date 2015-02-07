@@ -13,7 +13,9 @@
  */
 package com.midpaint.interfaces;
 
-import com.midpaint.objects.Canvas;
+import com.midpaint.commands.ChangeColorCommand;
+import com.midpaint.commands.DeleteShapeCommand;
+import com.midpaint.commands.Invoker;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 
@@ -22,7 +24,7 @@ import javax.swing.JColorChooser;
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
 public class PaintFrame extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form PaintFrame
      */
@@ -186,16 +188,28 @@ public class PaintFrame extends javax.swing.JFrame {
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
 
+        if (canvasPanel1.getCanvas().getSelectedShape() != null) {
+            DeleteShapeCommand deleteShape = new DeleteShapeCommand(canvasPanel1.getCanvas().getSelectedShape(),
+                    canvasPanel1.getCanvas());
+            deleteShape.execute();
+            canvasPanel1.getInvoker().addCommand(deleteShape);
+            repaint();
+        }
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void colorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorButtonActionPerformed
-        
 
         if (canvasPanel1.getCanvas().getSelectedShape() != null) {
-            Color color = JColorChooser.showDialog(rootPane, "Select Color", Color.black);
-            canvasPanel1.getCanvas().getSelectedShape().setColor(color);
+            Color color = JColorChooser.showDialog(rootPane, "Color Chooser", Color.black);
+//            canvasPanel1.getCanvas().getSelectedShape().setColor(color);
+            ChangeColorCommand changeColor = new ChangeColorCommand(canvasPanel1.getCanvas().getSelectedShape(),
+                    canvasPanel1.getCanvas(), canvasPanel1.getCanvas().getSelectedShape().getColor());
+            changeColor.setNewColor(color);
+            changeColor.execute();
+            canvasPanel1.getInvoker().addCommand(changeColor);
+            repaint();
         }
-        canvasPanel1.repaint();
+
 
     }//GEN-LAST:event_colorButtonActionPerformed
 
@@ -241,6 +255,7 @@ public class PaintFrame extends javax.swing.JFrame {
             }
         });
     }
+    private Invoker invoker = new Invoker();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.midpaint.interfaces.CanvasPanel canvasPanel1;
