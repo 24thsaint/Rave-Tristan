@@ -13,23 +13,31 @@ import java.awt.Color;
  *
  * @author hero
  */
-public class ColorChangeCommand implements Command{
+public class ColorChangeCommand implements Command {
 
     private Shape shape;
     private Canvas canvas;
     private Color newColor;
     private Color oldColor;
-    
-    
-    
+
+    public ColorChangeCommand(Shape shape, Canvas canvas, Color oldColor) {
+        this.shape = shape;
+        this.canvas = canvas;
+        this.oldColor = oldColor;
+    }
+
+    public void setNewColor(Color newColor) {
+        this.newColor = newColor;
+    }
+
     @Override
     public void execute() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        canvas.getSelectedShape().setColor(newColor);
     }
 
     @Override
     public void unexecute() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        canvas.getSelectedShape().setColor(oldColor);
     }
-    
+
 }
