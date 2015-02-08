@@ -16,6 +16,8 @@ package com.midpaint.interfaces;
 import com.midpaint.commands.ChangeColorCommand;
 import com.midpaint.commands.DeleteShapeCommand;
 import com.midpaint.commands.Invoker;
+import com.midpaint.objects.Canvas;
+import com.midpaint.objects.Shape;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 
@@ -47,8 +49,6 @@ public class PaintFrame extends javax.swing.JFrame {
         drawSquareButton = new javax.swing.JButton();
         removeButton = new javax.swing.JButton();
         colorButton = new java.awt.Button();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         undo = new javax.swing.JButton();
         redo = new javax.swing.JButton();
 
@@ -89,7 +89,7 @@ public class PaintFrame extends javax.swing.JFrame {
         jDesktopPane1.setLayer(canvasPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         drawEllipsButton.setText("Draw Ellipse");
-        drawEllipsButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        drawEllipsButton.setBorder(new javax.swing.border.MatteBorder(null));
         drawEllipsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 drawEllipsButtonActionPerformed(evt);
@@ -97,7 +97,7 @@ public class PaintFrame extends javax.swing.JFrame {
         });
 
         drawSquareButton.setText("Draw Square");
-        drawSquareButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        drawSquareButton.setBorder(new javax.swing.border.MatteBorder(null));
         drawSquareButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 drawSquareButtonActionPerformed(evt);
@@ -105,7 +105,7 @@ public class PaintFrame extends javax.swing.JFrame {
         });
 
         removeButton.setText("Remove");
-        removeButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        removeButton.setBorder(new javax.swing.border.MatteBorder(null));
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeButtonActionPerformed(evt);
@@ -113,7 +113,7 @@ public class PaintFrame extends javax.swing.JFrame {
         });
 
         colorButton.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        colorButton.setLabel("Channge Color");
+        colorButton.setLabel("Change Shape Color");
         colorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 colorButtonActionPerformed(evt);
@@ -121,6 +121,7 @@ public class PaintFrame extends javax.swing.JFrame {
         });
 
         undo.setText("Undo");
+        undo.setBorder(new javax.swing.border.MatteBorder(null));
         undo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 undoActionPerformed(evt);
@@ -128,6 +129,7 @@ public class PaintFrame extends javax.swing.JFrame {
         });
 
         redo.setText("Redo");
+        redo.setBorder(new javax.swing.border.MatteBorder(null));
         redo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 redoActionPerformed(evt);
@@ -147,13 +149,13 @@ public class PaintFrame extends javax.swing.JFrame {
                         .addComponent(drawSquareButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(undo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(redo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(undo, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(redo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(colorButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 143, Short.MAX_VALUE))
+                        .addGap(0, 173, Short.MAX_VALUE))
                     .addComponent(jDesktopPane1))
                 .addContainerGap())
         );
@@ -188,9 +190,11 @@ public class PaintFrame extends javax.swing.JFrame {
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
 
+        shape = canvasPanel1.getCanvas().getSelectedShape();
+        canvas = canvasPanel1.getCanvas();
+
         if (canvasPanel1.getCanvas().getSelectedShape() != null) {
-            DeleteShapeCommand deleteShape = new DeleteShapeCommand(canvasPanel1.getCanvas().getSelectedShape(),
-                    canvasPanel1.getCanvas());
+            DeleteShapeCommand deleteShape = new DeleteShapeCommand(shape, canvas);
             deleteShape.execute();
             canvasPanel1.getInvoker().addCommand(deleteShape);
             repaint();
@@ -199,11 +203,14 @@ public class PaintFrame extends javax.swing.JFrame {
 
     private void colorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorButtonActionPerformed
 
+        shape = canvasPanel1.getCanvas().getSelectedShape();
+        canvas = canvasPanel1.getCanvas();
+        Color oldColor = canvasPanel1.getCanvas().getSelectedShape().getColor();
+
         if (canvasPanel1.getCanvas().getSelectedShape() != null) {
-            Color color = JColorChooser.showDialog(rootPane, "Color Chooser", Color.black);
+            color = JColorChooser.showDialog(rootPane, "Color Chooser", Color.black);
 //            canvasPanel1.getCanvas().getSelectedShape().setColor(color);
-            ChangeColorCommand changeColor = new ChangeColorCommand(canvasPanel1.getCanvas().getSelectedShape(),
-                    canvasPanel1.getCanvas(), canvasPanel1.getCanvas().getSelectedShape().getColor());
+            ChangeColorCommand changeColor = new ChangeColorCommand(shape, canvas, oldColor);
             changeColor.setNewColor(color);
             changeColor.execute();
             canvasPanel1.getInvoker().addCommand(changeColor);
@@ -256,14 +263,14 @@ public class PaintFrame extends javax.swing.JFrame {
         });
     }
     private Invoker invoker = new Invoker();
-
+    private Shape shape;
+    private Canvas canvas;
+    private Color color;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.midpaint.interfaces.CanvasPanel canvasPanel1;
     private java.awt.Button colorButton;
     private javax.swing.JButton drawEllipsButton;
     private javax.swing.JButton drawSquareButton;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JButton redo;
     private javax.swing.JButton removeButton;
