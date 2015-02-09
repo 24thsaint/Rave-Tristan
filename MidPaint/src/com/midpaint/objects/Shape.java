@@ -76,19 +76,9 @@ public abstract class Shape {
         this.color = color;
     }
 
-    public void move(int newX, int newY) {
-        x = newX;
-        y = newY;
-    }
-
     public abstract void draw(Graphics g);
 
     public abstract boolean contains(int x, int y);
-
-    public void resize(int newWidth, int newHeight) {
-        width = newWidth;
-        height = newHeight;
-    }
 
     public void alterShape(int x, int y, int width, int height) {
         this.x = x;

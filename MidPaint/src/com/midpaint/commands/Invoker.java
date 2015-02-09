@@ -13,6 +13,7 @@
  */
 package com.midpaint.commands;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 /**
@@ -25,13 +26,26 @@ public class Invoker {
     private Stack<Command> redoStack = new Stack<>();
 
     public Command undo() {
-        Command command = undoStack.pop();
+        Command command = null;
+        try {
+            command = undoStack.pop();
+        } catch (EmptyStackException e) {
+            System.out.println("Nothing to undo");
+            command = new NullCommand();
+        }
         redoStack.push(command);
         return command;
     }
 
     public Command redo() {
-        Command command = redoStack.pop();
+        Command command = null;
+        try{
+            command = redoStack.pop();
+        }
+        catch (EmptyStackException e){
+            System.out.println("Nothing to redo");
+            command = new NullCommand();
+        }
         undoStack.push(command);
         return command;
     }

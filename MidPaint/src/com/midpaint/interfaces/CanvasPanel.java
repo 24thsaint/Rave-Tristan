@@ -129,7 +129,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         if (canMove) {
             int x = evt.getX() - deltaX;
             int y = evt.getY() - deltaY;
-            shape.move(x, y);
+            shape.alterShape(x, y, shape.getWidth(), shape.getHeight());
             setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
         }
 
@@ -322,7 +322,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         repaint();
     }
 
-    public void undo() {
+    public void undo() {        
         invoker.undo().unexecute();
         repaint();
     }
