@@ -37,13 +37,13 @@ public class MoveShapeCommand implements Command {
     }
 
     @Override
-    public void execute() {
-        shape.move(newX, newY);
+    public void execute() {        
+        shape.alterShape(newX, newY, shape.getWidth(), shape.getHeight());
     }
 
     @Override
     public void unexecute() {
-        shape.move(oldX, oldY);
+        shape.alterShape(oldX, oldY, shape.getWidth(), shape.getHeight());
     }
 
     public void setNewLocation(int x, int y) {
