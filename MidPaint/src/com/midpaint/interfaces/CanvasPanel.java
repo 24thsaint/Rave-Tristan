@@ -131,6 +131,7 @@ public class CanvasPanel extends javax.swing.JPanel {
             int y = evt.getY() - deltaY;
             shape.alterShape(x, y, shape.getWidth(), shape.getHeight());
             setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+
         }
 
         if (canResize) {
@@ -143,7 +144,7 @@ public class CanvasPanel extends javax.swing.JPanel {
                     switch (resizeHandle.getCursorType()) {
                         case Cursor.N_RESIZE_CURSOR:
                             int heightC = shape.getHeight() - height;
-                            shape.alterShape(shape.getX(), shape.getY() + height, shape.getWidth(), heightC);                            
+                            shape.alterShape(shape.getX(), shape.getY() + height, shape.getWidth(), heightC);
                             break;
                         case Cursor.NW_RESIZE_CURSOR:
                             int widthC = shape.getWidth() - width;
@@ -331,7 +332,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         invoker.redo().execute();
         repaint();
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

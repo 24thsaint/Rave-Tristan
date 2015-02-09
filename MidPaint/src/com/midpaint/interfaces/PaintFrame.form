@@ -35,15 +35,15 @@
                       <Component id="drawEllipsButton" min="-2" pref="95" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="drawSquareButton" min="-2" pref="100" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="removeButton" min="-2" pref="108" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="undo" min="-2" pref="51" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="redo" min="-2" pref="53" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="undo" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="redo" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="colorButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="143" max="32767" attributes="0"/>
+                      <Component id="fillShape" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="242" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jDesktopPane1" max="32767" attributes="0"/>
               </Group>
@@ -60,10 +60,10 @@
                       <Component id="drawEllipsButton" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                       <Component id="drawSquareButton" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="removeButton" max="32767" attributes="0"/>
-                  <Component id="colorButton" max="32767" attributes="0"/>
-                  <Component id="undo" max="32767" attributes="0"/>
-                  <Component id="redo" max="32767" attributes="0"/>
+                  <Component id="fillShape" max="32767" attributes="0"/>
+                  <Component id="redo" alignment="0" max="32767" attributes="0"/>
+                  <Component id="removeButton" alignment="0" max="32767" attributes="0"/>
+                  <Component id="undo" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jDesktopPane1" max="32767" attributes="0"/>
@@ -122,8 +122,11 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Draw Ellipse"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+            <BevelBorder>
+              <Color PropertyName="highlightInner" blue="66" green="66" red="66" type="rgb"/>
+              <Color PropertyName="shadowOuter" blue="33" green="33" red="33" type="rgb"/>
+            </BevelBorder>
           </Border>
         </Property>
       </Properties>
@@ -135,8 +138,11 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Draw Square"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+            <BevelBorder>
+              <Color PropertyName="highlightInner" blue="66" green="66" red="66" type="rgb"/>
+              <Color PropertyName="shadowOuter" blue="33" green="33" red="33" type="rgb"/>
+            </BevelBorder>
           </Border>
         </Property>
       </Properties>
@@ -148,8 +154,11 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Remove"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder/>
+          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+            <BevelBorder>
+              <Color PropertyName="highlightInner" blue="66" green="66" red="66" type="rgb"/>
+              <Color PropertyName="shadowOuter" blue="33" green="33" red="33" type="rgb"/>
+            </BevelBorder>
           </Border>
         </Property>
       </Properties>
@@ -157,36 +166,28 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="java.awt.Button" name="colorButton">
+    <Component class="java.awt.Button" name="fillShape">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="12" style="1"/>
         </Property>
-        <Property name="label" type="java.lang.String" value="Channge Color"/>
+        <Property name="label" type="java.lang.String" value="Fill Shape"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="colorButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Undo"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Redo"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fillShapeActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="undo">
       <Properties>
         <Property name="text" type="java.lang.String" value="Undo"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+            <BevelBorder>
+              <Color PropertyName="highlightInner" blue="66" green="66" red="66" type="rgb"/>
+              <Color PropertyName="shadowOuter" blue="33" green="33" red="33" type="rgb"/>
+            </BevelBorder>
+          </Border>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="undoActionPerformed"/>
@@ -195,6 +196,14 @@
     <Component class="javax.swing.JButton" name="redo">
       <Properties>
         <Property name="text" type="java.lang.String" value="Redo"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+            <BevelBorder>
+              <Color PropertyName="highlightInner" blue="66" green="66" red="66" type="rgb"/>
+              <Color PropertyName="shadowOuter" blue="33" green="33" red="33" type="rgb"/>
+            </BevelBorder>
+          </Border>
+        </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="redoActionPerformed"/>
