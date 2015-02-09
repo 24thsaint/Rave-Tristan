@@ -130,7 +130,7 @@ public class CanvasPanel extends javax.swing.JPanel {
             int x = evt.getX() - deltaX;
             int y = evt.getY() - deltaY;
             shape.move(x, y);
-            shape.setColor(new Color(0, true));
+
             setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 
         }
@@ -333,7 +333,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         invoker.redo().execute();
         repaint();
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
