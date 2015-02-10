@@ -34,7 +34,7 @@ public class ResizeShapeCommand implements Command {
         this.oldHeight = oldHeight;
     }
 
-    public void newAlterShape(int newX, int newY, int newHeight, int newWidth) {
+    public void setNewShapeParameters(int newX, int newY, int newHeight, int newWidth) {
         this.newX = newX;
         this.newY = newY;
         this.newHeight = newHeight;

@@ -323,7 +323,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         repaint();
     }
 
-    public void undo() {        
+    public void undo() {
         invoker.undo().unexecute();
         repaint();
     }
@@ -332,7 +332,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         invoker.redo().execute();
         repaint();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
