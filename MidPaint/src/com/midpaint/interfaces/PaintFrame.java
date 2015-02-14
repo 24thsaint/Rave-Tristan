@@ -212,7 +212,7 @@ public class PaintFrame extends javax.swing.JFrame {
 //            canvasPanel1.getCanvas().getSelectedShape().setColor(color);
             ChangeColorCommand changeColor = new ChangeColorCommand(shape, canvas, oldColor);
             changeColor.setNewColor(color);
-            changeColor.execute();
+            changeColor.execute();            
             canvasPanel1.getInvoker().addCommand(changeColor);
             repaint();
         }
