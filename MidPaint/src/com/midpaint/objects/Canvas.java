@@ -13,7 +13,7 @@
  */
 package com.midpaint.objects;
 
-import com.midpaint.commands.Invoker;
+import com.midpaint.commands.Painter;
 import java.util.ArrayList;
 import java.util.List;
 

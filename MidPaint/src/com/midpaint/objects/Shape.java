@@ -86,4 +86,20 @@ public abstract class Shape {
         this.height = height;
         this.width = width;
     }
+    
+    public void ghostify(boolean doGhost) {
+        int alpha = 0;
+        int ghostAlpha = 100;
+        int normalAlpha = 255;
+
+        if (doGhost) {
+            alpha = ghostAlpha;
+        } else {
+            alpha = normalAlpha;
+        }
+
+        Color color = new Color(getColor().getRed(),
+                getColor().getGreen(), getColor().getBlue(), alpha);
+        setColor(color);        
+    }
 }

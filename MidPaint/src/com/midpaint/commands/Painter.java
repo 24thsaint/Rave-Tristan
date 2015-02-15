@@ -20,12 +20,12 @@ import java.util.Stack;
  *
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
-public class Invoker {
+public class Painter {
 
     private Stack<Command> undoStack = new Stack<>();
     private Stack<Command> redoStack = new Stack<>();
 
-    public Command undo() {
+    public void undo() {
         Command command = null;
         try {
             command = undoStack.pop();
@@ -34,10 +34,10 @@ public class Invoker {
             command = new NullCommand();
         }
         redoStack.push(command);
-        return command;
+        command.unexecute();
     }
 
-    public Command redo() {
+    public void redo() {
         Command command = null;
         try{
             command = redoStack.pop();
@@ -46,13 +46,14 @@ public class Invoker {
             System.out.println("Nothing to redo");
             command = new NullCommand();
         }
-        undoStack.push(command);
-        return command;
+        undoStack.push(command);        
+        command.execute();
     }
 
-    public void addCommand(Command command) {
+    public void execute(Command command) {
         undoStack.add(command);
         redoStack.clear();
+        command.execute();
     }
 
 }

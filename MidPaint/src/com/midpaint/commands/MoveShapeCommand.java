@@ -22,16 +22,14 @@ import com.midpaint.objects.Shape;
  */
 public class MoveShapeCommand implements Command {
 
-    private Shape shape;
-    private Canvas canvas;
+    private Shape shape;    
     private int newX;
     private int newY;
     private int oldX;
     private int oldY;
 
-    public MoveShapeCommand(Shape shape, Canvas canvas, int oldX, int oldY) {
-        this.shape = shape;
-        this.canvas = canvas;
+    public MoveShapeCommand(Shape shape, int oldX, int oldY) {
+        this.shape = shape;       
         this.oldX = oldX;
         this.oldY = oldY;
     }

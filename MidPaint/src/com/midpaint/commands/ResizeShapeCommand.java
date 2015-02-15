@@ -14,8 +14,7 @@ import com.midpaint.objects.Shape;
  */
 public class ResizeShapeCommand implements Command {
 
-    private Shape shape;
-    private Canvas canvas;
+    private Shape shape;    
     private int oldX;
     private int oldY;
     private int oldWidth;
@@ -25,20 +24,19 @@ public class ResizeShapeCommand implements Command {
     private int newWidth;
     private int newHeight;
 
-    public ResizeShapeCommand(Shape shape, Canvas canvas, int oldX, int oldY, int oldWidth, int oldHeight) {
-        this.shape = shape;
-        this.canvas = canvas;
+    public ResizeShapeCommand(Shape shape, int oldX, int oldY, int oldWidth, int oldHeight) {
+        this.shape = shape;        
         this.oldX = oldX;
         this.oldY = oldY;
         this.oldWidth = oldWidth;
         this.oldHeight = oldHeight;
     }
 
-    public void setNewShapeParameters(int newX, int newY, int newHeight, int newWidth) {
+    public void setNewShapeParameters(int newX, int newY, int newWidth, int newHeight) {
         this.newX = newX;
         this.newY = newY;
-        this.newHeight = newHeight;
         this.newWidth = newWidth;
+        this.newHeight = newHeight;        
     }
 
     @Override

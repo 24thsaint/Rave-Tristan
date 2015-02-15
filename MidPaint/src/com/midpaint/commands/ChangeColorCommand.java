@@ -15,29 +15,26 @@ import java.awt.Color;
  */
 public class ChangeColorCommand implements Command {
 
-    private Shape shape;
-    private Canvas canvas;
+    private Shape shape;    
     private Color newColor;
     private Color oldColor;
 
-    public ChangeColorCommand(Shape shape, Canvas canvas, Color oldColor) {
+    public ChangeColorCommand(Shape shape,
+            Color oldColor,
+            Color newColor) {
         this.shape = shape;
-        this.canvas = canvas;
         this.oldColor = oldColor;
-    }
-
-    public void setNewColor(Color newColor) {
         this.newColor = newColor;
     }
 
     @Override
     public void execute() {
-        canvas.getSelectedShape().setColor(newColor);
+        shape.setColor(newColor);
     }
 
     @Override
     public void unexecute() {
-        canvas.getSelectedShape().setColor(oldColor);
+        shape.setColor(oldColor);
     }
 
 }

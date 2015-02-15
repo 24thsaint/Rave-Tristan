@@ -15,7 +15,7 @@ package com.midpaint.interfaces;
 
 import com.midpaint.commands.DeleteShapeCommand;
 import com.midpaint.commands.DrawShapeCommand;
-import com.midpaint.commands.Invoker;
+import com.midpaint.commands.Painter;
 import com.midpaint.commands.MoveShapeCommand;
 import com.midpaint.commands.ResizeShapeCommand;
 import com.midpaint.objects.Canvas;
@@ -46,15 +46,16 @@ public class CanvasPanel extends javax.swing.JPanel {
     private int deltaY;
     private MoveShapeCommand moveShapeCommand;
     private ResizeShapeCommand resizeShapeCommand;
-    private Invoker invoker = new Invoker();
+    private Painter painter = new Painter();
     private int currentResizeHandle = 0;
+    private boolean hasChanged = false;
 
     public Canvas getCanvas() {
         return canvas;
     }
 
-    public Invoker getInvoker() {
-        return invoker;
+    public Painter getPainter() {
+        return painter;
     }
 
     /**
@@ -112,12 +113,20 @@ public class CanvasPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
-        for (SquareResizeHandle handle : resizeHandles) {
-            if (handle.contains(evt.getX(), evt.getY())) {
-                setCursor(Cursor.getPredefinedCursor(handle.getCursorType()));
-                break;
-            } else {
-                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        if (canvas.getSelectedShape() == null) {
+            return;
+        }
+
+        if (canvas.getSelectedShape().contains(evt.getX(), evt.getY())) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        } else {
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+
+            for (SquareResizeHandle handle : resizeHandles) {
+                if (handle.contains(evt.getX(), evt.getY())) {
+                    setCursor(Cursor.getPredefinedCursor(handle.getCursorType()));
+                    break;
+                }
             }
         }
     }//GEN-LAST:event_formMouseMoved
@@ -128,19 +137,18 @@ public class CanvasPanel extends javax.swing.JPanel {
         }
 
         Shape shape = canvas.getSelectedShape();
+        shape.ghostify(true);
 
         if (canMove) {
             int x = evt.getX() - deltaX;
             int y = evt.getY() - deltaY;
-            shape.alterShape(x, y, shape.getWidth(), shape.getHeight());
+            shape.alterShape(x, y, shape.getWidth(), shape.getHeight());            
             setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-
         }
 
         if (canResize) {
             int width = evt.getX() - shape.getX();
             int height = evt.getY() - shape.getY();
-            //shape.resize(width, height);
 
             //  NW  N   NE
             //  W       E
@@ -150,100 +158,133 @@ public class CanvasPanel extends javax.swing.JPanel {
             switch (currentResizeHandle) {
                 case Cursor.N_RESIZE_CURSOR:
                     deltaHeight = shape.getHeight() - height;
-                    shape.alterShape(shape.getX(), shape.getY() + height, shape.getWidth(), deltaHeight);
+                    shape.alterShape(
+                            shape.getX(), shape.getY() + height,
+                            shape.getWidth(), deltaHeight
+                    );
                     break;
                 case Cursor.NW_RESIZE_CURSOR:
                     deltaWidth = shape.getWidth() - width;
                     deltaHeight = shape.getHeight() - height;
-                    shape.alterShape(shape.getX() + width, shape.getY() + height, deltaWidth, deltaHeight);
+                    shape.alterShape(shape.getX() + width, shape.getY() + height,
+                            deltaWidth, deltaHeight
+                    );
                     break;
                 case Cursor.E_RESIZE_CURSOR:
                     deltaWidth = shape.getWidth() - width;
-                    shape.alterShape(shape.getX() + width, shape.getY(), deltaWidth, shape.getHeight());
+                    shape.alterShape(shape.getX() + width, shape.getY(),
+                            deltaWidth, shape.getHeight()
+                    );
                     break;
                 case Cursor.SW_RESIZE_CURSOR:
                     deltaWidth = shape.getWidth() - width;
                     deltaHeight = height;
-                    shape.alterShape(shape.getX() + width, shape.getY(), deltaWidth, deltaHeight);
+                    shape.alterShape(shape.getX() + width, shape.getY(),
+                            deltaWidth, deltaHeight
+                    );
                     break;
                 case Cursor.S_RESIZE_CURSOR:
                     deltaHeight = height;
-                    shape.alterShape(shape.getX(), shape.getY(), shape.getWidth(), deltaHeight);
+                    shape.alterShape(shape.getX(), shape.getY(),
+                            shape.getWidth(), deltaHeight
+                    );
                     break;
                 case Cursor.SE_RESIZE_CURSOR:
                     deltaWidth = width;
                     deltaHeight = height;
-                    shape.alterShape(shape.getX(), shape.getY(), deltaWidth, deltaHeight);
+                    shape.alterShape(shape.getX(), shape.getY(),
+                            deltaWidth, deltaHeight
+                    );
                     break;
                 case Cursor.W_RESIZE_CURSOR:
                     deltaWidth = width;
-                    shape.alterShape(shape.getX(), shape.getY(), deltaWidth, shape.getHeight());
+                    shape.alterShape(shape.getX(), shape.getY(),
+                            deltaWidth, shape.getHeight()
+                    );
                     break;
                 case Cursor.NE_RESIZE_CURSOR:
                     deltaWidth = width;
                     deltaHeight = shape.getHeight() - height;
-                    shape.alterShape(shape.getX(), shape.getY() + height, deltaWidth, deltaHeight);
+                    shape.alterShape(shape.getX(), shape.getY() + height,
+                            deltaWidth, deltaHeight
+                    );
                     break;
                 default:
-                    //do nothing
+                    //do nothing, print error message if something went wrong
+                    System.out.println("Invalid resize handle selected");
                     break;
             }
         }
+
+        hasChanged = true;
 
         repaint();
     }//GEN-LAST:event_formMouseDragged
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-
-        if (canvas.getSelectedShape() != null) {
-
-            Shape shape = canvas.getSelectedShape();
-
-            for (SquareResizeHandle resizeHandle : resizeHandles) {
-                if (resizeHandle.contains(evt.getX(), evt.getY())) {
-                    canResize = true;
-                    canMove = false;
-                    currentResizeHandle = resizeHandle.getCursorType();
-                    resizeShapeCommand = new ResizeShapeCommand(shape, canvas,
-                            shape.getX(), shape.getY(),
-                            shape.getWidth(), shape.getHeight());
-                    break;
-                } else {
-                    canMove = true;
-                    canResize = false;
-                    deltaX = evt.getX() - shape.getX();
-                    deltaY = evt.getY() - shape.getY();
-                    currentResizeHandle = -1;
-                    moveShapeCommand = new MoveShapeCommand(shape, canvas, 
-                            shape.getX(), shape.getY());                    
-                }
-            }
-
-            System.out.println(canResize ? "Shape resize ENABLED" : "Shape resize DISABLED");
-            System.out.println(canMove ? "Shape movement ENABLED" : "Shape movement DISABLED");
+        if (canvas.getSelectedShape() == null) {
+            return;
         }
+
+        hasChanged = false;
+        canResize = false;
+        canMove = false;
+
+        Shape shape = canvas.getSelectedShape();
+
+        for (SquareResizeHandle resizeHandle : resizeHandles) {
+            if (resizeHandle.contains(evt.getX(), evt.getY())) {
+                canResize = true;
+                canMove = false;
+                currentResizeHandle = resizeHandle.getCursorType();
+                resizeShapeCommand = new ResizeShapeCommand(shape,
+                        shape.getX(), shape.getY(),
+                        shape.getWidth(), shape.getHeight());
+                moveShapeCommand = null;
+                break;
+            } else {
+                canMove = true;
+                canResize = false;
+                deltaX = evt.getX() - shape.getX();
+                deltaY = evt.getY() - shape.getY();
+                currentResizeHandle = -1;
+                moveShapeCommand = new MoveShapeCommand(shape,
+                        shape.getX(), shape.getY());
+                resizeShapeCommand = null;
+            }
+        }
+
+        System.out.println(canResize ? "Shape resize ENABLED" : "Shape resize DISABLED");
+        System.out.println(canMove ? "Shape movement ENABLED" : "Shape movement DISABLED");
+
+        // requests that CanvasPanel gets the input focus from the mouse events
         requestFocus();
         repaint();
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        if (moveShapeCommand != null) {
-            moveShapeCommand.setNewLocation(
-                    canvas.getSelectedShape().getX(),
-                    canvas.getSelectedShape().getY());            
-            invoker.addCommand(moveShapeCommand);
-            moveShapeCommand = null;
+        if (canvas.getSelectedShape() == null || !hasChanged) {
+            return;
         }
 
-        if (resizeShapeCommand != null) {
-            resizeShapeCommand.setNewShapeParameters(canvas.getSelectedShape().getX(),
-                    canvas.getSelectedShape().getY(),
-                    canvas.getSelectedShape().getWidth(),
-                    canvas.getSelectedShape().getHeight());
-            invoker.addCommand(resizeShapeCommand);
-            resizeShapeCommand = null;
+        Shape shape = canvas.getSelectedShape();        
+
+        if (moveShapeCommand != null && canMove) {            
+            moveShapeCommand.setNewLocation(
+                    shape.getX(), shape.getY()
+            );
+            painter.execute(moveShapeCommand);
         }
+
+        if (resizeShapeCommand != null && canResize) {
+            resizeShapeCommand.setNewShapeParameters(
+                    shape.getX(), shape.getY(),
+                    shape.getWidth(), shape.getHeight());
+            painter.execute(resizeShapeCommand);
+        }
+        
+        shape.ghostify(false);
+        repaint();
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
@@ -253,6 +294,7 @@ public class CanvasPanel extends javax.swing.JPanel {
             if (shape.contains(evt.getX(), evt.getY())) {
                 canvas.setSelectedShape(shape);
                 System.out.println(shape + " has been selected.");
+                break;
             } else {
                 System.out.println("No shape selected");
             }
@@ -261,13 +303,15 @@ public class CanvasPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseClicked
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        if (canvas.getSelectedShape() != null && evt.getKeyCode() == KeyEvent.VK_DELETE) {
+        if (canvas.getSelectedShape() == null) {
+            return;
+        }
+
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
             DeleteShapeCommand deleteCommand = new DeleteShapeCommand(canvas.getSelectedShape(), canvas);
-            deleteCommand.execute();
+            painter.execute(deleteCommand);
             canvas.setSelectedShape(null);
             repaint();
-            invoker.addCommand(deleteCommand);
-//            canvas.removeShape(canvas.getSelectedShape());
         }
     }//GEN-LAST:event_formKeyPressed
 
@@ -323,8 +367,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         );
 
         DrawShapeCommand drawShapeCommand = new DrawShapeCommand(ellipse, canvas);
-        drawShapeCommand.execute();
-        invoker.addCommand(drawShapeCommand);
+        painter.execute(drawShapeCommand);
 
         System.out.println(ellipse + " added to canvas");
         repaint();
@@ -337,22 +380,23 @@ public class CanvasPanel extends javax.swing.JPanel {
                 Shape.PRIMARY_SIZE);
 
         DrawShapeCommand drawShapeCommand = new DrawShapeCommand(square, canvas);
-        drawShapeCommand.execute();
-        invoker.addCommand(drawShapeCommand);
+        painter.execute(drawShapeCommand);
 
         System.out.println(square + " added to canvas");
         repaint();
     }
 
     public void undo() {
-        invoker.undo().unexecute();
+        canvas.setSelectedShape(null);
+        painter.undo();
         repaint();
     }
 
     public void redo() {
-        invoker.redo().execute();
+        canvas.setSelectedShape(null);
+        painter.redo();
         repaint();
-    }
+    }   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
