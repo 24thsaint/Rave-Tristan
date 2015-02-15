@@ -15,7 +15,6 @@ package com.midpaint.interfaces;
 
 import com.midpaint.commands.ChangeColorCommand;
 import com.midpaint.commands.DeleteShapeCommand;
-import com.midpaint.commands.Painter;
 import com.midpaint.objects.Canvas;
 import com.midpaint.objects.Shape;
 import java.awt.Color;
