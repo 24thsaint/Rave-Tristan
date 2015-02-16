@@ -13,7 +13,6 @@
  */
 package com.midpaint.commands;
 
-import com.midpaint.objects.Canvas;
 import com.midpaint.objects.Shape;
 
 /**
