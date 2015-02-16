@@ -31,7 +31,7 @@ public class Painter {
             command = undoStack.pop();
         } catch (EmptyStackException e) {
             System.out.println("Nothing to undo");
-            command = new NullCommand();
+            return;
         }
         redoStack.push(command);
         command.unexecute();
@@ -44,7 +44,7 @@ public class Painter {
         }
         catch (EmptyStackException e){
             System.out.println("Nothing to redo");
-            command = new NullCommand();
+            return;
         }
         undoStack.push(command);        
         command.execute();

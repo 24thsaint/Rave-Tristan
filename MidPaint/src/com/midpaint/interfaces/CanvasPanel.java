@@ -21,7 +21,7 @@ import com.midpaint.commands.ResizeShapeCommand;
 import com.midpaint.objects.Canvas;
 import com.midpaint.objects.Ellipse;
 import com.midpaint.objects.Shape;
-import com.midpaint.objects.Square;
+import com.midpaint.objects.Rectangle;
 import com.midpaint.objects.SquareResizeHandle;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -137,7 +137,7 @@ public class CanvasPanel extends javax.swing.JPanel {
         }
 
         Shape shape = canvas.getSelectedShape();
-        shape.ghostify(true);
+        shape.ghostify(true);        
 
         if (canMove) {
             int x = evt.getX() - deltaX;
@@ -353,7 +353,7 @@ public class CanvasPanel extends javax.swing.JPanel {
 
             g.setColor(Color.BLACK);
 
-            for (Square handle : resizeHandles) {
+            for (Rectangle handle : resizeHandles) {
                 g.fillRect(handle.getX(), handle.getY(), SQUARE_SIZE, SQUARE_SIZE);
             }
         }
@@ -373,20 +373,20 @@ public class CanvasPanel extends javax.swing.JPanel {
         repaint();
     }
 
-    public void addSquare() {
-        Square square = new Square(random.nextInt(getWidth() - Shape.PRIMARY_SIZE),
+    public void addRectangle() {
+        Rectangle rectangle = new Rectangle(random.nextInt(getWidth() - Shape.PRIMARY_SIZE),
                 random.nextInt(getHeight() - Shape.PRIMARY_SIZE),
                 Shape.PRIMARY_SIZE,
                 Shape.PRIMARY_SIZE);
 
-        DrawShapeCommand drawShapeCommand = new DrawShapeCommand(square, canvas);
+        DrawShapeCommand drawShapeCommand = new DrawShapeCommand(rectangle, canvas);
         painter.execute(drawShapeCommand);
 
-        System.out.println(square + " added to canvas");
+        System.out.println(rectangle + " added to canvas");
         repaint();
     }
 
-    public void undo() {
+    public void undo() {        
         canvas.setSelectedShape(null);
         painter.undo();
         repaint();

@@ -15,7 +15,6 @@ package com.midpaint.interfaces;
 
 import com.midpaint.commands.ChangeColorCommand;
 import com.midpaint.commands.DeleteShapeCommand;
-import com.midpaint.commands.Painter;
 import com.midpaint.objects.Canvas;
 import com.midpaint.objects.Shape;
 import java.awt.Color;
@@ -46,16 +45,15 @@ public class PaintFrame extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         canvasPanel1 = new com.midpaint.interfaces.CanvasPanel();
         drawEllipsButton = new javax.swing.JButton();
-        drawSquareButton = new javax.swing.JButton();
+        drawRectangleButton = new javax.swing.JButton();
         removeButton = new javax.swing.JButton();
-        fillShape = new java.awt.Button();
         undo = new javax.swing.JButton();
         redo = new javax.swing.JButton();
+        fillShape = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MidPaint");
         setBackground(new java.awt.Color(51, 51, 51));
-        setResizable(false);
 
         canvasPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -67,7 +65,7 @@ public class PaintFrame extends javax.swing.JFrame {
         );
         canvasPanel1Layout.setVerticalGroup(
             canvasPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 424, Short.MAX_VALUE)
+            .addGap(0, 427, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
@@ -81,58 +79,59 @@ public class PaintFrame extends javax.swing.JFrame {
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(canvasPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jDesktopPane1.setLayer(canvasPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        drawEllipsButton.setText("Draw Ellipse");
-        drawEllipsButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), new java.awt.Color(51, 51, 51), null));
+        drawEllipsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/midpaint/resources/Add_Circle.png"))); // NOI18N
+        drawEllipsButton.setText("Draw Circle");
         drawEllipsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 drawEllipsButtonActionPerformed(evt);
             }
         });
 
-        drawSquareButton.setText("Draw Square");
-        drawSquareButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), new java.awt.Color(51, 51, 51), null));
-        drawSquareButton.addActionListener(new java.awt.event.ActionListener() {
+        drawRectangleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/midpaint/resources/Add_Square.png"))); // NOI18N
+        drawRectangleButton.setText("Draw Square");
+        drawRectangleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                drawSquareButtonActionPerformed(evt);
+                drawRectangleButtonActionPerformed(evt);
             }
         });
 
-        removeButton.setText("Remove");
-        removeButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), new java.awt.Color(51, 51, 51), null));
+        removeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/midpaint/resources/Delete.png"))); // NOI18N
+        removeButton.setText("Remove Shape");
         removeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeButtonActionPerformed(evt);
             }
         });
 
-        fillShape.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        fillShape.setLabel("Fill Shape");
-        fillShape.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fillShapeActionPerformed(evt);
-            }
-        });
-
+        undo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/midpaint/resources/Undo.png"))); // NOI18N
         undo.setText("Undo");
-        undo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), new java.awt.Color(51, 51, 51), null));
         undo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 undoActionPerformed(evt);
             }
         });
 
+        redo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/midpaint/resources/Redo.png"))); // NOI18N
         redo.setText("Redo");
-        redo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(102, 102, 102), new java.awt.Color(51, 51, 51), null));
+        redo.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         redo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 redoActionPerformed(evt);
+            }
+        });
+
+        fillShape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/midpaint/resources/Fill.png"))); // NOI18N
+        fillShape.setText("Fill Shape");
+        fillShape.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fillShapeActionPerformed(evt);
             }
         });
 
@@ -144,34 +143,33 @@ public class PaintFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(drawEllipsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(drawSquareButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(undo, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(redo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(drawEllipsButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fillShape, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 242, Short.MAX_VALUE))
+                        .addComponent(drawRectangleButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(undo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(redo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fillShape)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jDesktopPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(drawEllipsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(drawSquareButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(fillShape, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(redo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(drawRectangleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(removeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(undo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                    .addComponent(undo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(redo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fillShape, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(drawEllipsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDesktopPane1)
                 .addContainerGap())
         );
@@ -184,9 +182,9 @@ public class PaintFrame extends javax.swing.JFrame {
         canvasPanel1.addEllipse();
     }//GEN-LAST:event_drawEllipsButtonActionPerformed
 
-    private void drawSquareButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawSquareButtonActionPerformed
-        canvasPanel1.addSquare();
-    }//GEN-LAST:event_drawSquareButtonActionPerformed
+    private void drawRectangleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawRectangleButtonActionPerformed
+        canvasPanel1.addRectangle();
+    }//GEN-LAST:event_drawRectangleButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
 
@@ -199,11 +197,19 @@ public class PaintFrame extends javax.swing.JFrame {
 
         DeleteShapeCommand deleteShape = new DeleteShapeCommand(shape, canvas);
         canvasPanel1.getPainter().execute(deleteShape);
+        canvasPanel1.getCanvas().setSelectedShape(null);
         repaint();
     }//GEN-LAST:event_removeButtonActionPerformed
 
-    private void fillShapeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillShapeActionPerformed
+    private void undoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoActionPerformed
+        canvasPanel1.undo();
+    }//GEN-LAST:event_undoActionPerformed
 
+    private void redoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoActionPerformed
+        canvasPanel1.redo();
+    }//GEN-LAST:event_redoActionPerformed
+
+    private void fillShapeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillShapeActionPerformed
         if (canvasPanel1.getCanvas().getSelectedShape() == null) {
             return;
         }
@@ -216,14 +222,6 @@ public class PaintFrame extends javax.swing.JFrame {
         canvasPanel1.getPainter().execute(changeColor);
         repaint();
     }//GEN-LAST:event_fillShapeActionPerformed
-
-    private void undoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoActionPerformed
-        canvasPanel1.undo();
-    }//GEN-LAST:event_undoActionPerformed
-
-    private void redoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoActionPerformed
-        canvasPanel1.redo();
-    }//GEN-LAST:event_redoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -267,8 +265,8 @@ public class PaintFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.midpaint.interfaces.CanvasPanel canvasPanel1;
     private javax.swing.JButton drawEllipsButton;
-    private javax.swing.JButton drawSquareButton;
-    private java.awt.Button fillShape;
+    private javax.swing.JButton drawRectangleButton;
+    private javax.swing.JButton fillShape;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JButton redo;
     private javax.swing.JButton removeButton;

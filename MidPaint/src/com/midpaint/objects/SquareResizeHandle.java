@@ -18,7 +18,7 @@ package com.midpaint.objects;
  *
  * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
-public class SquareResizeHandle extends Square {
+public class SquareResizeHandle extends Rectangle {
 
     private int cursorType;
 
