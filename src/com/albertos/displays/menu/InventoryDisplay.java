@@ -27,6 +27,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -52,7 +53,7 @@ public class InventoryDisplay extends javax.swing.JFrame {
         inventory = Inventory.getInstance();
 
         card = (CardLayout) rootPane.getLayout();
-        dtm = (DefaultTableModel) resultTable.getModel();        
+        dtm = (DefaultTableModel) resultTable.getModel();
         addedSelection = new JList(addedList);
         refreshTable();
     }
@@ -499,6 +500,7 @@ public class InventoryDisplay extends javax.swing.JFrame {
 
             dtm.addRow(data);
         }
+
     }
 
     private void returnToMain() {
@@ -685,6 +687,8 @@ public class InventoryDisplay extends javax.swing.JFrame {
             if (searchAvailable.getText().toUpperCase()
                     .contains(availableSelection.getModel().getElementAt(i).toString().toUpperCase())) {
                 availableSelection.setSelectedIndex(i);
+            } else {
+                availableSelection.setSelectedIndex(0);
             }
         }
         System.out.println(availableSelection.getModel().getSize());

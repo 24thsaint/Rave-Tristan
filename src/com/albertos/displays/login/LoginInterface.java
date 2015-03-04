@@ -153,15 +153,15 @@ public class LoginInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        Employee employeeRegistration = null;
+        Employee employee = null;
         try {
-            employeeRegistration = Employee.validate(jTextField1.getText(), jPasswordField1.getText());
+            employee = Employee.validate(jTextField1.getText(), jPasswordField1.getText());
         } catch (NoResultException e) {
             JOptionPane.showMessageDialog(rootPane, "Invalid username and password", "Confirm", JOptionPane.ERROR_MESSAGE);
         }
 
-        if (employeeRegistration != null) {
-            System.out.println(employeeRegistration.getFirstName());
+        if (employee != null) {
+            System.out.println(employee.getFirstName());
             ManagerInterface manager = new ManagerInterface();
             manager.setVisible(true);
             this.dispose();

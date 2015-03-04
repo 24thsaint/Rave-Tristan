@@ -5,12 +5,7 @@
  */
 package com.albertos.objects;
 
-import com.albertos.controllers.EMFactory;
-import com.albertos.controllers.IngredientJpaController;
-import com.albertos.controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +23,28 @@ public class Ingredient implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String ingredientName;
-    private int quantity;
+    private int totalQuantity;
+    private int usedQuantity;
+
+    public int getUsedQuantity() {
+        return usedQuantity;
+    }
+
+    public void setUsedQuantity(int usedQuantity) {
+        this.usedQuantity = usedQuantity;
+    }
+
+    public int getRemainingQuantity() {
+        return (totalQuantity - usedQuantity);
+    }
+
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
 
     public String getIngredientName() {
         return ingredientName;
@@ -38,16 +54,9 @@ public class Ingredient implements Serializable {
         this.ingredientName = ingredientName;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public void subtractQuantity(int quantity) {
-        this.quantity -= quantity;
+        this.totalQuantity -= quantity;
+        this.usedQuantity += quantity;
     }
 
     public Long getId() {
@@ -81,29 +90,6 @@ public class Ingredient implements Serializable {
     @Override
     public String toString() {
         return "EMFactory.IngredientInventory[ id=" + id + " ]";
-    }
-
-    private static final IngredientJpaController controller
-            = new IngredientJpaController(EMFactory.getEmf());
-
-    public void save() {
-        controller.create(this);
-    }
-
-    public void delete() {
-        try {
-            controller.destroy(this.getId());
-        } catch (NonexistentEntityException ex) {
-            Logger.getLogger(Ingredient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void edit() {
-        try {
-            controller.edit(this);
-        } catch (Exception ex) {
-            Logger.getLogger(Ingredient.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }

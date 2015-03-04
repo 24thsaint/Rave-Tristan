@@ -5,7 +5,16 @@
  */
 package com.albertos.displays;
 
+import com.albertos.controllers.EMFactory;
+import com.albertos.controllers.IngredientJpaController;
+import com.albertos.controllers.exceptions.NonexistentEntityException;
+import com.albertos.objects.Ingredient;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -14,12 +23,46 @@ import javax.swing.table.DefaultTableModel;
  */
 public class InventoryInterface extends javax.swing.JFrame {
 
+    private IngredientJpaController controller = new IngredientJpaController(EMFactory.getEmf());
+
     /**
      * Creates new form EmployeeInterface
      */
     public InventoryInterface() {
         initComponents();
-        dtm = (DefaultTableModel) InventoryTable.getModel();
+        refreshTable();
+    }
+
+    public void refreshTable() {
+        dtm = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "Ingredient", "Total Quantity", "Used Quantity", "Remaining Quantity"
+                }
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
+
+        //dtm = (DefaultTableModel) InventoryTable.getModel();
+        List<Ingredient> ingredients = controller.findIngredientInventoryEntities();
+        for (Ingredient ingredient : ingredients) {
+
+            String data1 = ingredient.getIngredientName();
+            String data2 = "" + ingredient.getTotalQuantity();
+            String data3 = "" + ingredient.getUsedQuantity();
+            String data4 = "" + ingredient.getRemainingQuantity();
+
+            String[] data = {data1, data2, data3, data4};
+            dtm.addRow(data);
+        }
+
+        InventoryTable.setModel(dtm);
     }
 
     /**
@@ -54,7 +97,7 @@ public class InventoryInterface extends javax.swing.JFrame {
 
         InventoryPanel.setBackground(new java.awt.Color(255, 255, 153));
 
-        jLabel5.setFont(new java.awt.Font("Oxygen-Sans", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 18)); // NOI18N
         jLabel5.setText("Search:");
 
         SearchTextfield.setBackground(new java.awt.Color(255, 255, 204));
@@ -65,11 +108,15 @@ public class InventoryInterface extends javax.swing.JFrame {
         });
 
         returnButton.setBackground(new java.awt.Color(255, 255, 153));
+        returnButton.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 14)); // NOI18N
         returnButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/albertos/resources/return.png"))); // NOI18N
+        returnButton.setText("Return");
         returnButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         addButton.setBackground(new java.awt.Color(255, 255, 153));
+        addButton.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 14)); // NOI18N
         addButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/albertos/resources/Add Icon .png"))); // NOI18N
+        addButton.setText("Add");
         addButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,7 +125,9 @@ public class InventoryInterface extends javax.swing.JFrame {
         });
 
         DeleteButton.setBackground(new java.awt.Color(255, 255, 153));
+        DeleteButton.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 14)); // NOI18N
         DeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/albertos/resources/Delete.png"))); // NOI18N
+        DeleteButton.setText("Delete");
         DeleteButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         DeleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,7 +136,9 @@ public class InventoryInterface extends javax.swing.JFrame {
         });
 
         EditButton.setBackground(new java.awt.Color(255, 255, 153));
+        EditButton.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 14)); // NOI18N
         EditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/albertos/resources/edit.png"))); // NOI18N
+        EditButton.setText("Edit");
         EditButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         EditButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,7 +147,9 @@ public class InventoryInterface extends javax.swing.JFrame {
         });
 
         SearchButton.setBackground(new java.awt.Color(255, 255, 153));
+        SearchButton.setFont(new java.awt.Font("DejaVu Sans Condensed", 1, 14)); // NOI18N
         SearchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/albertos/resources/search_1.png"))); // NOI18N
+        SearchButton.setText("Search");
         SearchButton.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         SearchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,62 +196,55 @@ public class InventoryInterface extends javax.swing.JFrame {
         InventoryPanelLayout.setHorizontalGroup(
             InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
-            .addGroup(InventoryPanelLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(SearchTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45))
-            .addGroup(InventoryPanelLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(returnButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InventoryPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InventoryPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(167, 167, 167))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(201, 201, 201))
+            .addGroup(InventoryPanelLayout.createSequentialGroup()
+                .addGroup(InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(InventoryPanelLayout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(returnButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(InventoryPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(SearchTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         InventoryPanelLayout.setVerticalGroup(
             InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InventoryPanelLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addGroup(InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(InventoryPanelLayout.createSequentialGroup()
-                        .addGap(310, 310, 310)
-                        .addComponent(returnButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(InventoryPanelLayout.createSequentialGroup()
-                        .addGroup(InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(InventoryPanelLayout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(SearchTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5)))
-                            .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(EditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(DeleteButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(20, 20, 20)
+                .addGroup(InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SearchTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(InventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(returnButton)
+                    .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(EditButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DeleteButton))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jPanel1.add(InventoryPanel, "card2");
@@ -242,10 +288,6 @@ public class InventoryInterface extends javax.swing.JFrame {
         AddInventoryInterface add = new AddInventoryInterface();
         add.setInventory(this);
         add.show();
-        dtm.addRow(new String[]{"hello", "how", "are", "you"});
-        dtm.addRow(new String[]{"tristan", "how", "are", "you"});
-        dtm.addRow(new String[]{"karlo", "how", "are", "you"});
-        dtm.addRow(new String[]{"macadangdang", "how", "are", "you"});
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
@@ -264,7 +306,25 @@ public class InventoryInterface extends javax.swing.JFrame {
         } else {
             int confirm = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to delete the selected ingredient?", "Confirm", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                dtm.removeRow(InventoryTable.getSelectedRow());
+                String iName = (String) dtm.getValueAt(
+                        InventoryTable.getSelectedRow(), 0);
+                
+                Ingredient ingredient
+                        = controller.seachByIngredientName(iName);
+
+                try {
+                    controller.destroy(ingredient.getId());
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(InventoryInterface.class.getName()).log(Level.SEVERE, null, ex);
+                    return;
+                }
+
+                JOptionPane.showMessageDialog(null,
+                        "Ingredient has been successfully deleted!",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                refreshTable();
             }
         }
     }//GEN-LAST:event_DeleteButtonActionPerformed

@@ -1,11 +1,19 @@
+/*
+ *  ==++++++++++++++++++++++++++++++++++++++++++++++++++++==
+ *  |      CENTRAL PHILIPPINE UNIVERSITY                   |
+ *  |      Bachelor of Science in Software Engineering     |
+ *  |      Jaro, Iloilo City, Philippines                  |
+ *  |                                                      |
+ *  |          This program is written by Rave, ©2015.     |
+ *  |          You are free to use and distribute this.    |
+ *  |          Reach me at: admin@blackout.biz.tm          |
+ *  |                                                      |
+ *  |               ~~~"CODE the FUTURE"~~~                |
+ *  ==++++++++++++++++++++++++++++++++++++++++++++++++++++==
+ */
 package com.albertos.controllers;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-import com.albertos.objects.Ingredient;
+import com.albertos.cashiermanager.Cashier;
 import com.albertos.controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
@@ -18,11 +26,11 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author hero
+ * @author Rave Noren Gidor-Sambo Villavicencio-Arevalo
  */
-public class IngredientJpaController implements Serializable {
+public class CashierJpaController implements Serializable {
 
-    public IngredientJpaController(EntityManagerFactory emf) {
+    public CashierJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -31,12 +39,12 @@ public class IngredientJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Ingredient ingredientInventory) {
+    public void create(Cashier cashier) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(ingredientInventory);
+            em.persist(cashier);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -45,33 +53,19 @@ public class IngredientJpaController implements Serializable {
         }
     }
 
-    public Ingredient seachByIngredientName(String name) {
-        EntityManager em = null;
-        Query query = null;
-        try {
-            em = getEntityManager();
-            query = em.createQuery("SELECT i "
-                    + "FROM Ingredient i WHERE i.ingredientName=:qq");
-            query.setParameter("qq", name);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return (Ingredient) query.getSingleResult();
-    }
-
-    public void edit(Ingredient ingredientInventory) throws NonexistentEntityException, Exception {
+    public void edit(Cashier cashier) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            ingredientInventory = em.merge(ingredientInventory);
+            cashier = em.merge(cashier);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Long id = ingredientInventory.getId();
-                if (findIngredientInventory(id) == null) {
-                    throw new NonexistentEntityException("The ingredientInventory with id " + id + " no longer exists.");
+                Long id = cashier.getId();
+                if (findCashier(id) == null) {
+                    throw new NonexistentEntityException("The cashier with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -87,14 +81,14 @@ public class IngredientJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Ingredient ingredientInventory;
+            Cashier cashier;
             try {
-                ingredientInventory = em.getReference(Ingredient.class, id);
-                ingredientInventory.getId();
+                cashier = em.getReference(Cashier.class, id);
+                cashier.getId();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The ingredientInventory with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The cashier with id " + id + " no longer exists.", enfe);
             }
-            em.remove(ingredientInventory);
+            em.remove(cashier);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -103,19 +97,19 @@ public class IngredientJpaController implements Serializable {
         }
     }
 
-    public List<Ingredient> findIngredientInventoryEntities() {
-        return findIngredientInventoryEntities(true, -1, -1);
+    public List<Cashier> findCashierEntities() {
+        return findCashierEntities(true, -1, -1);
     }
 
-    public List<Ingredient> findIngredientInventoryEntities(int maxResults, int firstResult) {
-        return findIngredientInventoryEntities(false, maxResults, firstResult);
+    public List<Cashier> findCashierEntities(int maxResults, int firstResult) {
+        return findCashierEntities(false, maxResults, firstResult);
     }
 
-    private List<Ingredient> findIngredientInventoryEntities(boolean all, int maxResults, int firstResult) {
+    private List<Cashier> findCashierEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Ingredient.class));
+            cq.select(cq.from(Cashier.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -127,20 +121,20 @@ public class IngredientJpaController implements Serializable {
         }
     }
 
-    public Ingredient findIngredientInventory(Long id) {
+    public Cashier findCashier(Long id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Ingredient.class, id);
+            return em.find(Cashier.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getIngredientInventoryCount() {
+    public int getCashierCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Ingredient> rt = cq.from(Ingredient.class);
+            Root<Cashier> rt = cq.from(Cashier.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -148,5 +142,5 @@ public class IngredientJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }
